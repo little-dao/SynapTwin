@@ -6,7 +6,6 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
 
-# Start capturing video
 cap = cv2.VideoCapture(0)
 
 def count_fingers(hand_landmarks):
@@ -42,6 +41,8 @@ while cap.isOpened():
                 text = "Open Palm (Stop)"
             elif fingers == 1:
                 text = "One Finger (Turn Left)"
+            elif fingers == 2:
+                text = "Two Fingers (Turn Right)"
             else:
                 text = "Gesture Not Recognized"
 
