@@ -1,0 +1,79 @@
+import omni
+import asyncio
+from pxr import UsdShade, UsdGeom, Sdf, Gf
+
+stage = omni.usd.get_context().get_stage()
+
+model_path = "/stylizedhumanbrain"
+material_path = model_path + "/Looks/OmniPBR"
+shader_path = material_path + "/Shader"
+
+prim = stage.GetPrimAtPath(model_path)
+if not prim:
+    raise Exception("Model path incorrect!")
+
+UsdGeom.Imageable(prim).MakeVisible()
+
+material = UsdShade.Material.Define(stage, material_path)
+UsdShade.MaterialBindingAPI(prim).Bind(material)
+
+shader = UsdShade.Shader.Define(stage, shader_path)
+shader.CreateIdAttr("OmniPBR")
+material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "bsdf")
+
+shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.2)
+shader.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
+
+sample_data = [
+    {"EDA": [0.02], "HR": [75], "TEMP": [36.5]},
+    {"EDA": [0.05], "HR": [120], "TEMP": [37.2]},
+    {"EDA": [0.15], "HR": [95], "TEMP": [36.8]},
+    {"EDA": [0.30], "HR": [140], "TEMP": [38.1]},
+    {"EDA": [0.45], "HR": [110], "TEMP": [37.0]},
+    {"EDA": [0.65], "HR": [130], "TEMP": [38.5]},
+    {"EDA": [0.80], "HR": [150], "TEMP": [39.0]}
+]
+
+def map_color(eda):
+    return Gf.Vec3f(min(max(eda,0),1), 0.0, 1 - min(max(eda,0),1))
+
+def map_emission(temp):
+    intensity = min(max((temp - 36.5)/(39 - 36.5),0),1)
+    return intensity * 20000
+
+def map_scale(hr):
+    return 1.0 + ((hr - 60)/(150 - 60)) * 0.5
+
+async def visualize_stably():
+    xform = UsdGeom.Xformable(prim)
+
+    for data_point in sample_data:
+        eda = data_point["EDA"][0]
+        temp = data_point["TEMP"][0]
+        hr = data_point["HR"][0]
+
+        shader.CreateInput("albedo_color", Sdf.ValueTypeNames.Color3f).Set(map_color(eda))
+        shader.CreateInput("emissive_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1,1,1))
+        shader.CreateInput("emissive_intensity", Sdf.ValueTypeNames.Float).Set(map_emission(temp))
+
+        scale_factor = map_scale(hr)
+        xform.ClearXformOpOrder()
+        xform.AddScaleOp().Set(Gf.Vec3f(scale_factor))
+
+        for _ in range(10):
+            await omni.kit.app.get_app().next_update_async()
+            await asyncio.sleep(0.3)
+
+    #Clearly set final stable state (pure red glow):
+    shader.CreateInput("albedo_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1.0, 0.0, 0.0))
+    shader.CreateInput("emissive_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1.0, 0.2, 0.2))
+    shader.CreateInput("emissive_intensity", Sdf.ValueTypeNames.Float).Set(25000.0)
+
+    # Longer stable view (~5 seconds clearly red):
+    for _ in range(15):
+        await omni.kit.app.get_app().next_update_async()
+        await asyncio.sleep(0.3)
+
+    print("Brain visualization completed and set to red clearly.")
+
+asyncio.ensure_future(visualize_stably())
