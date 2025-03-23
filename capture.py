@@ -22,7 +22,7 @@ MAX_BUFFER = 1800  # max points stored per signal (30 minutes at 6 Hz)
 JSON_LOG_PATH = "biometric_data.json"
 
 # Baseline recording period (in seconds)
-BASELINE_PERIOD = 20  # Record baseline for 1 minute
+BASELINE_PERIOD = 5  # Record baseline for 1 minute
 
 # Gemini API setup
 genai.configure(api_key="AIzaSyBPOI74hfCYbDDrkSFUH-tTiJivcnndmxs")
@@ -275,7 +275,7 @@ def chat_with_user_until_calm(features):
     
     # Continue conversation until stress decreases
     turns = 0
-    max_turns = 5  # Maximum conversation turns before checking stress again
+    max_turns = 2  # Maximum conversation turns before checking stress again
     
     while turns < max_turns:
         # Get user input
@@ -518,6 +518,73 @@ def save_to_json(data):
     except Exception as e:
         print(f"❌ Error saving to JSON: {e}")
 
+segment_emotions = []
+segment_times = []
+
+def analyze_emotions(features):
+    """Analyze features to infer likely emotional states"""
+    if features is None:
+        return "Unknown"
+    
+    emotions = []
+    
+    # Use HR and EDA to infer emotional states
+    hr = features["hr"]
+    eda_mean = features["eda_mean"]
+    scr_count = features["scr_count"]
+    temp = features["temp"]
+    
+    # Simple rule-based emotion inference
+    # Note: This is a simplified model - real emotion detection requires more sophisticated algorithms
+    if hr > 90 and eda_mean > 5:
+        if scr_count > 3:
+            emotions.append("Excited")
+        else:
+            emotions.append("Stressed")
+    elif hr > 85 and eda_mean > 3:
+        emotions.append("Engaged")
+    elif hr < 70 and eda_mean < 2:
+        emotions.append("Relaxed")
+    elif hr < 65 and temp < 36:
+        emotions.append("Tired")
+    else:
+        emotions.append("Neutral")
+    
+    # Additional emotional nuances based on HRV
+    if features["rmssd"] < 20:
+        emotions.append("Tense")
+    elif features["rmssd"] > 50:
+        emotions.append("Calm")
+    
+    return emotions
+
+def generate_emotion_timeline(segment_emotions, segment_times):
+    """Generate a text-based timeline of emotions"""
+    if not segment_emotions or not segment_times:
+        return "No emotional data available yet"
+    
+    timeline = "📊 EMOTION TIMELINE:\n"
+    timeline += "═══════════════════════════════\n"
+    
+    for i, (time, emotions) in enumerate(zip(segment_times, segment_emotions)):
+        start_time = time.strftime("%H:%M:%S")
+        emotion_str = ", ".join(emotions) if emotions else "Unknown"
+        
+        # Use emoji indicators for emotional states
+        emoji = "😐"  # default
+        if "Excited" in emotions: emoji = "😃"
+        elif "Stressed" in emotions: emoji = "😰"
+        elif "Engaged" in emotions: emoji = "🤔"
+        elif "Relaxed" in emotions: emoji = "😌"
+        elif "Tired" in emotions: emoji = "😴"
+        elif "Tense" in emotions: emoji = "😬"
+        elif "Calm" in emotions: emoji = "😊"
+        
+        timeline += f"{start_time} {emoji} {emotion_str}\n"
+    
+    timeline += "═══════════════════════════════\n"
+    return timeline
+
 def process_segment():
     """Process a segment of data and take appropriate action"""
     features = extract_features()
@@ -525,10 +592,13 @@ def process_segment():
         print("⚠️ Not enough data to analyze yet")
         return
     
+    emotions = analyze_emotions(features)
+    segment_emotions.append(emotions)
+    segment_times.append(datetime.datetime.now())
+    
     # Check stress using improved method
     is_stressed, stress_score = detect_stress(features)
     
-    # Create log entry
     log_entry = {
         "timestamp": features["timestamp"],
         "time_range": f"{features['start_time']}–{features['end_time']}",
@@ -572,6 +642,10 @@ def process_segment():
                 print("⚠️ Stress levels remained elevated")
         
         log_entry["summary"] = f"Stress intervention conducted. Initial score: {stress_score:.1f}/100."
+        
+        if len(segment_emotions) > 0:
+            timeline = generate_emotion_timeline(segment_emotions, segment_times)
+            print("\n" + timeline + "\n")
     else:
         # Otherwise just get a summary
         summary = summarize_with_genai(features, stress_score)
@@ -583,6 +657,10 @@ def process_segment():
         print(f"🧘 Stress Score: {stress_score:.1f}/100")
         print(summary)
         print("============================\n")
+        
+        if len(segment_emotions) > 0:
+            timeline = generate_emotion_timeline(segment_emotions, segment_times)
+            print("\n" + timeline + "\n")
     
     # Save to segment logs and JSON
     segment_logs.append(log_entry)
