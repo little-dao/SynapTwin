@@ -11,7 +11,7 @@ import google.generativeai as genai
 IP = "127.0.0.1"
 PORT = 12345
 SEGMENT_DURATION = 30  # in seconds (.5 minutes)
-GEN_AI_MODEL = "gemini-1.5-pro-latest"  # Replace with the model you're using
+GEN_AI_MODEL = "gemini-2.0-flash-001"  # Replace with the model you're using
 MAX_BUFFER = 1800  # max points stored per signal (30 minutes at 6 Hz)
 
 # Gemini API setup
@@ -70,13 +70,13 @@ def extract_features():
 # ========== AI SUMMARY ==========
 def summarize_with_genai(features):
     prompt = f"""
-This is biometric data from a wearable device between {features['start_time']} and {features['end_time']}:
+This is biometric data from a wearable device(EMOTIBIT) between {features['start_time']} and {features['end_time']}:
 - Avg EDA: {features['eda_mean']:.4f}
 - EDA Variability: {features['eda_std']:.4f}
 - Estimated Heart Rate: {features['hr_est']:.2f} bpm
 - Skin Temperature Change: {features['temp_change']:.2f}°C
 
-What can this say about the user's stress, focus, or general state? Respond like a friendly health assistant.
+What can this say about the user's stress, focus, or general state? Respond like a friendly health assistant. Dont use markdown.
 """
     response = model.generate_content(prompt)
     return response.text.strip()
