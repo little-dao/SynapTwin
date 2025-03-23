@@ -138,7 +138,7 @@ def chat_with_user(features):
         User now detected having higher EDA than usual with regard to 20s of biometric data. 
         Please initiate a gentle and empathetic conversation, checking how they're feeling and offering support.
         Your tone must feel human and caring. Make this a sentence or two.
-        """
+        """+"User's current data from EMOTBIT:\n"+json.dumps(features)+"\n"+"User's historical EDA mean: "+str(sample_EDA_Mean)+"\n"+"User's historical EDA std: "+str(sample_EDA_Std)
         first_msg = chat.send_message(prompt).text
         speak(first_msg)
 
@@ -149,7 +149,7 @@ def chat_with_user(features):
                 print("🎤 Listening for user input...")
 
                 try:
-                    audio = recognizer.listen(source, timeout=6, phrase_time_limit=10)
+                    audio = recognizer.listen(source, timeout=6, phrase_time_limit=50)
                     user_input = recognizer.recognize_google(audio)
                     print(f"🧑 User said: {user_input}")
 
