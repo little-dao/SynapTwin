@@ -146,7 +146,6 @@ def chat_with_user(features):
         with mic as source:
             recognizer.adjust_for_ambient_noise(source)
             while True:
-                speak("I'm listening... You can say 'stop' anytime.")
                 print("🎤 Listening for user input...")
 
                 try:
@@ -188,6 +187,7 @@ def chat_with_user(features):
 
 def seg_features():
     eda=np.array(seg_buffers["EDA"])
+    print(eda)
     ppg=np.array(seg_buffers["PPG:IR"])
     temp=np.array(seg_buffers["THERM"])
     if len(eda)==0 or len(ppg)==0 or len(temp)==0:
@@ -208,22 +208,13 @@ def process_segment():
         print(sample_EDA_Std)
         print(sample_EDA_Mean)
         print(features["eda_mean"])
-        if (features["eda_mean"])>((sample_EDA_Mean)+sample_EDA_Std**2):
-            print("EDA anomaly detected")
-            print(features)
+        if (features["eda_mean"])>((sample_EDA_Mean+0.5)+sample_EDA_Std**2):
+            print("EDA vol detected")
+            for key in seg_buffers:
+                seg_buffers[key].clear()
+            timestamp_seg_buffer.clear()
             chat_with_user(features)
         #summary = summarize_with_genai(features)
-        #print(features)
-        # log_entry = {
-        #     "timestamp": f"{features['start_time']}–{features['end_time']}",
-        #     "ppg_mean": features['ppg_mean'],
-        #     "ppg_std": features['ppg_std'],
-        #     "eda_mean": features['eda_mean'],
-        #     "eda_std": features['eda_std'],
-        #     "temp_change": features['temp_change']
-        #     #"summary": summary
-        # }
-        # print(log_entry)
         # segment_logs.append(log_entry)
         print("\n===== 🧠 Segment Summary =====")
 
