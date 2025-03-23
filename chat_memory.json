@@ -1,0 +1,26 @@
+[
+  {
+    "role": "user",
+    "parts": [
+      "text: \"\\n    Summarize:\\n    - Avg EDA: 1.1077, Variability: 0.8265\\n    - PPG STD: 40358.13, Temp Change: -7.20\u00b0C.\\n    Write 2-sentence feedback on stress or mental state.\\n    \"\n"
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      "text: \"The individual exhibits relatively low average EDA (1.1077) with moderate variability (0.8265). However, the extremely high PPG standard deviation (40358.13) and significant temperature decrease (-7.20\u00b0C) suggest a potential state of high anxiety or distress.\\n\"\n"
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      "text: \"\\n    Summarize:\\n    - Avg EDA: 0.8165, Variability: 0.8529\\n    - PPG STD: 43426.14, Temp Change: -6.53\u00b0C.\\n    Write 2-sentence feedback on stress or mental state.\\n    \"\n"
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      "text: \"The individual\\'s average EDA is low (0.8165), but the variability is moderate (0.8529). Combined with a very high PPG standard deviation (43426.14) and a substantial temperature decrease (-6.53\u00b0C), this strongly suggests a state of significant stress or emotional arousal.\\n\"\n"
+    ]
+  }
+]

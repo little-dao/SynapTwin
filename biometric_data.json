@@ -1,0 +1,848 @@
+[
+  {
+    "timestamp": "2025-03-23T02:13:55.377237",
+    "time_range": "02:13:50\u201302:13:55",
+    "hr": 0.0,
+    "eda": 0.030248257002848035,
+    "temp_change": 0.3269996643066406,
+    "stress": false,
+    "summary": "Based on the provided data, the subject appears to be in a very relaxed state. The extremely low EDA and zero heart rate suggest minimal stress or arousal, while the slight temperature change could be normal physiological fluctuation."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:00.387083",
+    "time_range": "02:13:50\u201302:14:00",
+    "hr": 0.0,
+    "eda": 0.03024713494689078,
+    "temp_change": 0.322998046875,
+    "stress": false,
+    "summary": "The data indicates a state of extreme relaxation. The incredibly low EDA and zero heart rate suggest minimal to no stress or arousal, potentially even a non-responsive state, while the temperature change is minor."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:05.419424",
+    "time_range": "02:13:50\u201302:14:05",
+    "hr": 0.0,
+    "eda": 0.030246404130408105,
+    "temp_change": 0.4290008544921875,
+    "stress": false,
+    "summary": "This data points to a highly relaxed or unresponsive state. The minimal EDA and zero heart rate strongly suggest very low stress and arousal, while the small temperature change is likely within normal physiological variance."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:10.437592",
+    "time_range": "02:13:50\u201302:14:10",
+    "hr": 0.0,
+    "eda": 0.030245834994211532,
+    "temp_change": 0.46099853515625,
+    "stress": false,
+    "summary": "The individual is likely in a very relaxed state or potentially unresponsive. The extremely low EDA and absence of heart rate suggest minimal stress and arousal, with the slight temperature change possibly reflecting baseline bodily fluctuations."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:15.444528",
+    "time_range": "02:13:50\u201302:14:15",
+    "hr": 0.0,
+    "eda": 0.03024555550882587,
+    "temp_change": 0.503997802734375,
+    "stress": false,
+    "summary": "The metrics suggest a deeply relaxed or potentially unresponsive state. The minimal EDA activity combined with the absence of a heart rate indicates extremely low stress and arousal levels, while the temperature change likely represents typical bodily variations."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:20.467574",
+    "time_range": "02:13:50\u201302:14:20",
+    "hr": 0.0,
+    "eda": 0.030245282696998867,
+    "temp_change": 0.4659996032714844,
+    "stress": false,
+    "summary": "The data strongly suggests a state of deep relaxation or unresponsiveness. The extremely low EDA and zero heart rate indicate negligible stress and arousal, while the slight temperature change is likely within a normal range of physiological fluctuation."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:25.493856",
+    "time_range": "02:13:50\u201302:14:25",
+    "hr": 0.0,
+    "eda": 0.03024502544387899,
+    "temp_change": -7.545999526977539,
+    "stress": false,
+    "summary": "The subject appears to be in an extremely unusual, and potentially concerning, state. The incredibly low EDA, zero heart rate, and dramatic temperature drop suggest a severe physiological event requiring immediate attention."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:30.509956",
+    "time_range": "02:13:50\u201302:14:30",
+    "hr": 0.0,
+    "eda": 0.03024484822429763,
+    "temp_change": -7.4980010986328125,
+    "stress": false,
+    "summary": "The data is highly concerning and suggests a critical situation. The minimal EDA and absent heart rate, combined with the significant drop in temperature, indicate a severe physiological event that warrants immediate medical attention."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:35.543096",
+    "time_range": "02:13:50\u201302:14:35",
+    "hr": 0.0,
+    "eda": 0.030244680522942814,
+    "temp_change": -7.5410003662109375,
+    "stress": false,
+    "summary": "The data indicates a potentially life-threatening situation requiring immediate intervention. The extremely low EDA, lack of heart rate, and drastic temperature decrease point to a severe physiological crisis that needs urgent medical attention."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:40.560708",
+    "time_range": "02:13:50\u201302:14:40",
+    "hr": 0.0,
+    "eda": 0.030244550949190978,
+    "temp_change": -7.613000869750977,
+    "stress": false,
+    "summary": "This data suggests a severe and critical condition requiring immediate medical assistance. The incredibly low EDA, absence of heart rate, and significant temperature drop indicate a serious physiological event that needs urgent professional evaluation."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:45.643679",
+    "time_range": "02:13:50\u201302:14:45",
+    "hr": 0.0,
+    "eda": 0.03024442993685793,
+    "temp_change": -7.48900032043457,
+    "stress": false,
+    "summary": "This information suggests a dire situation needing immediate medical intervention. The combination of extremely low EDA, a complete lack of heart rate, and a sharply decreased temperature points toward a severe physiological event requiring urgent evaluation and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:50.659307",
+    "time_range": "02:13:50\u201302:14:50",
+    "hr": 0.0,
+    "eda": 0.03024434269388018,
+    "temp_change": -7.481000900268555,
+    "stress": false,
+    "summary": "The presented data indicates a critical condition requiring immediate medical assistance. The extremely low EDA, the absence of a heart rate, and the substantial temperature decrease collectively suggest a severe physiological event that demands prompt professional attention."
+  },
+  {
+    "timestamp": "2025-03-23T02:14:55.679538",
+    "time_range": "02:13:50\u201302:14:55",
+    "hr": 0.0,
+    "eda": 0.03024431544846083,
+    "temp_change": -7.516000747680664,
+    "stress": false,
+    "summary": "The reported metrics are highly concerning and suggest a potentially life-threatening situation demanding immediate medical intervention. The extremely low EDA, the absence of heart activity, coupled with the drastic temperature drop, points towards a severe physiological event requiring urgent professional assessment and care."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:00.775255",
+    "time_range": "02:13:54\u201302:15:00",
+    "hr": 0.0,
+    "eda": 0.030244274516157882,
+    "temp_change": -7.482999801635742,
+    "stress": false,
+    "summary": "This data indicates a critical situation requiring immediate medical intervention. The combination of exceptionally low EDA, a lack of a heartbeat, and a significant drop in temperature suggests a severe physiological event that necessitates urgent evaluation and treatment by medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:05.775603",
+    "time_range": "02:13:59\u201302:15:05",
+    "hr": 0.0,
+    "eda": 0.03024422158611167,
+    "temp_change": -7.579000473022461,
+    "stress": false,
+    "summary": "The data is profoundly concerning and points towards a potentially life-threatening medical emergency. The extremely low EDA, absence of heart rate, and drastic drop in body temperature all indicate a severe physiological event demanding immediate and expert medical attention."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:10.875230",
+    "time_range": "02:14:04\u201302:15:10",
+    "hr": 0.0,
+    "eda": 0.030244153178163938,
+    "temp_change": -7.55000114440918,
+    "stress": false,
+    "summary": "The readings indicate a critical and potentially life-threatening situation, necessitating urgent medical intervention. The combination of extremely low EDA, the absence of a heartbeat, and the substantial temperature decrease strongly suggests a severe physiological event requiring immediate evaluation and treatment by trained medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:15.875509",
+    "time_range": "02:14:09\u201302:15:15",
+    "hr": 0.0,
+    "eda": 0.03024409084505326,
+    "temp_change": -7.519001007080078,
+    "stress": false,
+    "summary": "The data suggests a very serious and potentially life-threatening medical emergency requiring immediate attention. The combination of extremely low EDA, a complete absence of heart rate, and a significant decrease in body temperature points towards a severe physiological event that necessitates urgent professional evaluation and medical care."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:20.908087",
+    "time_range": "02:14:14\u201302:15:20",
+    "hr": 0.0,
+    "eda": 0.030244023668343337,
+    "temp_change": -7.36400032043457,
+    "stress": false,
+    "summary": "The presented metrics strongly suggest a critical medical situation demanding immediate intervention. The combination of extremely low EDA, the absence of a heart rate, and the substantial drop in temperature indicates a severe physiological event that requires urgent professional medical assessment and care."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:25.973769",
+    "time_range": "02:14:19\u201302:15:25",
+    "hr": 0.0,
+    "eda": 0.03024397363644075,
+    "temp_change": -7.548000335693359,
+    "stress": false,
+    "summary": "The data presented indicates a dire medical emergency requiring immediate intervention. The combination of exceptionally low EDA, the lack of a heartbeat, and the significant drop in temperature strongly suggests a severe physiological event necessitating urgent assessment and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:31.007020",
+    "time_range": "02:14:24\u201302:15:31",
+    "hr": 0.0,
+    "eda": 0.030243929133250087,
+    "temp_change": -7.446001052856445,
+    "stress": false,
+    "summary": "This data is highly concerning and suggests a life-threatening medical emergency requiring immediate attention. The extremely low EDA, the absence of a heart rate, and the significant decrease in temperature all point toward a severe physiological event that necessitates urgent medical assessment and intervention."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:36.006914",
+    "time_range": "02:14:29\u201302:15:36",
+    "hr": 0.0,
+    "eda": 0.030243877922442083,
+    "temp_change": -7.405000686645508,
+    "stress": false,
+    "summary": "The provided information indicates a critical medical situation demanding immediate intervention and care. The combination of extremely low EDA, the complete absence of a heart rate, and the substantial temperature drop strongly suggests a severe physiological event requiring urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:41.040839",
+    "time_range": "02:14:34\u201302:15:41",
+    "hr": 0.0,
+    "eda": 0.0302438419057518,
+    "temp_change": -7.583000183105469,
+    "stress": false,
+    "summary": "The data indicates a life-threatening emergency requiring immediate medical attention. The combination of exceptionally low EDA, the absence of any heart rate, and the drastic drop in temperature strongly suggests a severe and critical physiological event that necessitates urgent professional evaluation and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:46.041013",
+    "time_range": "02:14:39\u201302:15:46",
+    "hr": 0.0,
+    "eda": 0.03024380806439279,
+    "temp_change": -7.585000991821289,
+    "stress": false,
+    "summary": "This data reflects a dire medical situation that requires immediate, professional intervention. The combination of an extremely low EDA reading, complete absence of a heart rate, and a significant and rapid drop in body temperature collectively indicate a severe and potentially life-threatening physiological event demanding urgent medical care."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:51.072730",
+    "time_range": "02:14:44\u201302:15:51",
+    "hr": 0.0,
+    "eda": 0.030243758695370486,
+    "temp_change": -7.561000823974609,
+    "stress": false,
+    "summary": "This information suggests a critical medical emergency necessitating immediate action. The combination of exceedingly low EDA, complete absence of a heartbeat, and a significant and rapid drop in body temperature indicates a severe physiological event requiring urgent professional medical evaluation and intervention."
+  },
+  {
+    "timestamp": "2025-03-23T02:15:56.089902",
+    "time_range": "02:14:49\u201302:15:56",
+    "hr": 0.0,
+    "eda": 0.03024369629132494,
+    "temp_change": -7.512001037597656,
+    "stress": false,
+    "summary": "The readings are extremely concerning and indicate a life-threatening medical situation demanding immediate medical intervention. The combination of exceptionally low EDA, a complete absence of a heart rate, and a significant decrease in body temperature strongly suggests a severe physiological event requiring urgent evaluation and treatment by qualified medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:01.172556",
+    "time_range": "02:14:54\u201302:16:01",
+    "hr": 0.0,
+    "eda": 0.030243670824034945,
+    "temp_change": -7.533000946044922,
+    "stress": false,
+    "summary": "This data indicates a critical medical emergency and necessitates immediate professional attention. The combination of extremely low EDA, an absent heart rate, and a drastic decrease in body temperature suggests a severe physiological event requiring urgent evaluation and intervention by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:06.190040",
+    "time_range": "02:14:59\u201302:16:06",
+    "hr": 0.0,
+    "eda": 0.030243645036355155,
+    "temp_change": -7.536001205444336,
+    "stress": false,
+    "summary": "The provided data suggests a life-threatening medical emergency requiring immediate medical intervention. The combination of extremely low EDA, the complete absence of a heartbeat, and the drastic drop in body temperature indicates a serious physiological event necessitating urgent evaluation and treatment by qualified medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:11.271963",
+    "time_range": "02:15:04\u201302:16:11",
+    "hr": 0.0,
+    "eda": 0.03024362211241444,
+    "temp_change": -7.540000915527344,
+    "stress": false,
+    "summary": "The presented metrics are extremely concerning and indicate a critical medical situation demanding immediate attention and professional intervention. The combined effect of exceptionally low EDA, the absence of a heart rate, and a significant drop in body temperature strongly points to a severe physiological event that necessitates urgent evaluation and treatment by trained medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:16.320636",
+    "time_range": "02:15:09\u201302:16:16",
+    "hr": 0.0,
+    "eda": 0.030243601991791928,
+    "temp_change": -7.552000045776367,
+    "stress": false,
+    "summary": "This data points to a severe medical emergency demanding immediate intervention and care. The combined presence of extremely low EDA, a complete absence of heart rate, and a substantial temperature decrease suggests a critical physiological event that necessitates urgent professional medical assessment and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:21.321029",
+    "time_range": "02:15:14\u201302:16:21",
+    "hr": 0.0,
+    "eda": 0.03024358275932626,
+    "temp_change": -7.565999984741211,
+    "stress": false,
+    "summary": "The presented metrics are highly concerning and indicate a life-threatening medical emergency requiring immediate attention. The combination of an extremely low EDA reading, the complete absence of a heart rate, and a significant and rapid drop in body temperature strongly suggests a severe physiological event that requires urgent professional medical evaluation and intervention."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:26.370533",
+    "time_range": "02:15:19\u201302:16:26",
+    "hr": 0.0,
+    "eda": 0.030243560109781437,
+    "temp_change": -7.569000244140625,
+    "stress": false,
+    "summary": "The data suggests a critical medical emergency demanding immediate intervention from qualified professionals. The combination of extremely low EDA, a complete lack of heart rate, and a drastic decrease in body temperature indicates a severe physiological event that necessitates urgent medical assessment and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:31.436282",
+    "time_range": "02:15:24\u201302:16:31",
+    "hr": 0.0,
+    "eda": 0.030243543606706218,
+    "temp_change": -7.503999710083008,
+    "stress": false,
+    "summary": "The information provided suggests a severe medical emergency and requires immediate attention. The extremely low EDA reading, complete absence of a heart rate, and significant drop in body temperature indicate a serious physiological event demanding urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:36.535983",
+    "time_range": "02:15:29\u201302:16:36",
+    "hr": 0.0,
+    "eda": 0.03024352774006612,
+    "temp_change": -7.564001083374023,
+    "stress": false,
+    "summary": "This data is extremely concerning and indicates a potentially life-threatening medical emergency requiring immediate intervention. The combination of an exceptionally low EDA level, a complete absence of heart activity, and a significant and rapid decrease in body temperature all point toward a severe physiological event necessitating urgent medical assessment and care by trained professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:41.570346",
+    "time_range": "02:15:35\u201302:16:41",
+    "hr": 0.0,
+    "eda": 0.03024351107135153,
+    "temp_change": -7.548999786376953,
+    "stress": false,
+    "summary": "The provided data indicates a dire medical situation requiring immediate medical intervention and support. The combination of exceedingly low EDA, a complete lack of a heartbeat, and a significant decline in body temperature strongly suggests a severe physiological event that necessitates urgent assessment and treatment by qualified medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:46.653569",
+    "time_range": "02:15:40\u201302:16:46",
+    "hr": 0.0,
+    "eda": 0.030243442786029643,
+    "temp_change": -7.5260009765625,
+    "stress": false,
+    "summary": "The presented information is highly concerning and indicates a critical medical emergency requiring immediate attention and intervention. The combination of an extremely low EDA, a complete absence of a heart rate, and a drastic decrease in body temperature strongly suggests a severe physiological event necessitating urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:51.684757",
+    "time_range": "02:15:45\u201302:16:51",
+    "hr": 0.0,
+    "eda": 0.03024331278995507,
+    "temp_change": -7.540000915527344,
+    "stress": false,
+    "summary": "The data suggests a severe medical emergency that demands immediate professional intervention. The combination of extremely low EDA, the absence of a heart rate, and a significant and rapid drop in body temperature strongly indicates a critical physiological event that necessitates urgent medical assessment and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:16:56.685277",
+    "time_range": "02:15:50\u201302:16:56",
+    "hr": 0.0,
+    "eda": 0.030243107793438764,
+    "temp_change": -7.461000442504883,
+    "stress": false,
+    "summary": "The reported metrics point to a dire medical situation requiring immediate intervention by qualified medical professionals. The combination of an extremely low EDA, the absence of any heart activity, and a significant and rapid drop in body temperature strongly suggests a severe physiological event necessitating urgent medical assessment and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:01.721348",
+    "time_range": "02:15:55\u201302:17:01",
+    "hr": 0.0,
+    "eda": 0.0302430044590599,
+    "temp_change": -7.562999725341797,
+    "stress": false,
+    "summary": "The provided data is highly alarming and indicates a critical medical emergency requiring immediate attention and intervention. The combination of extremely low EDA, a complete absence of a heartbeat, and a significant decline in body temperature all suggest a severe physiological event that necessitates urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:06.785176",
+    "time_range": "02:16:00\u201302:17:06",
+    "hr": 0.0,
+    "eda": 0.03024295111497243,
+    "temp_change": -7.440000534057617,
+    "stress": false,
+    "summary": "The presented information suggests a life-threatening medical emergency demanding immediate intervention and professional care. The combination of an extremely low EDA level, a complete absence of heart activity, and a significant and rapid drop in body temperature collectively points towards a severe physiological event necessitating urgent evaluation and treatment by qualified medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:11.785464",
+    "time_range": "02:16:05\u201302:17:11",
+    "hr": 0.0,
+    "eda": 0.030242930554474395,
+    "temp_change": -7.478000640869141,
+    "stress": false,
+    "summary": "The provided data signals a critical medical situation that requires immediate attention and intervention from trained professionals. The combination of an exceptionally low EDA, a complete absence of a heart rate, and a drastic and rapid decline in body temperature all point to a severe physiological event that necessitates urgent medical evaluation and treatment."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:16.785939",
+    "time_range": "02:16:10\u201302:17:16",
+    "hr": 0.0,
+    "eda": 0.03024292110775908,
+    "temp_change": -7.569000244140625,
+    "stress": false,
+    "summary": "These metrics are extremely concerning and suggest a severe medical emergency requiring immediate attention and intervention. The combination of an exceptionally low EDA reading, the complete absence of a heart rate, and a significant and rapid decrease in body temperature strongly indicates a life-threatening physiological event requiring urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:21.901256",
+    "time_range": "02:16:15\u201302:17:21",
+    "hr": 0.0,
+    "eda": 0.03024289443468054,
+    "temp_change": -7.477001190185547,
+    "stress": false,
+    "summary": "This data indicates a dire medical emergency requiring immediate and expert intervention. The combination of exceptionally low EDA, the complete absence of a heartbeat, and a substantial drop in body temperature strongly suggests a severe physiological event that necessitates urgent evaluation and treatment by trained medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:26.916852",
+    "time_range": "02:16:20\u201302:17:26",
+    "hr": 0.0,
+    "eda": 0.03024287720831732,
+    "temp_change": -7.63800048828125,
+    "stress": false,
+    "summary": "The metrics presented suggest a critical medical emergency requiring immediate and professional attention. The combination of exceedingly low EDA, a complete absence of heart function, and a significant and abrupt decline in body temperature points to a severe physiological event that necessitates urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:31.917350",
+    "time_range": "02:16:25\u201302:17:31",
+    "hr": 0.0,
+    "eda": 0.03024285220230619,
+    "temp_change": -7.488000869750977,
+    "stress": false,
+    "summary": "The provided information indicates a critical medical situation necessitating immediate and professional intervention. The convergence of an extremely low EDA reading, the complete absence of a heart rate, and a significant and rapid decline in body temperature strongly suggests a life-threatening physiological event demanding urgent evaluation and treatment by qualified medical personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:36.949920",
+    "time_range": "02:16:30\u201302:17:36",
+    "hr": 0.0,
+    "eda": 0.030242825529227656,
+    "temp_change": -7.493999481201172,
+    "stress": false,
+    "summary": "The presented data is highly concerning and indicates a life-threatening medical emergency requiring immediate intervention and expert care. The combination of exceptionally low EDA, the complete absence of heart activity, and a substantial and rapid decrease in body temperature strongly suggests a severe physiological event necessitating urgent evaluation and treatment by trained medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:42.016563",
+    "time_range": "02:16:35\u201302:17:42",
+    "hr": 0.0,
+    "eda": 0.030242822750781974,
+    "temp_change": -7.441997528076172,
+    "stress": false,
+    "summary": "This data indicates a critical medical emergency demanding immediate professional attention and intervention. The convergence of an extremely low EDA level, the complete absence of a heart rate, and a significant drop in body temperature strongly points towards a severe physiological event requiring urgent medical assessment and treatment by qualified personnel."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:47.115874",
+    "time_range": "02:16:40\u201302:17:47",
+    "hr": 0.0,
+    "eda": 0.03024279996752739,
+    "temp_change": -7.613002777099609,
+    "stress": false,
+    "summary": "The provided metrics are deeply concerning and indicate a critical medical emergency necessitating immediate attention and expert intervention. The concurrence of an exceptionally low EDA, a complete absence of a heart rate, and a significant and rapid decline in body temperature strongly suggests a life-threatening physiological event requiring urgent evaluation and treatment by trained medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:52.182875",
+    "time_range": "02:16:45\u201302:17:52",
+    "hr": 0.0,
+    "eda": 0.03024277218307058,
+    "temp_change": -7.788002014160156,
+    "stress": false,
+    "summary": "The data presents a highly critical medical situation requiring immediate and expert intervention. The combination of extremely low EDA, complete absence of a heartbeat, and a dramatic and rapid decrease in body temperature strongly suggests a life-threatening physiological event that demands urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:17:57.182461",
+    "time_range": "02:16:50\u201302:17:57",
+    "hr": 0.0,
+    "eda": 0.030242726060872277,
+    "temp_change": -7.788000106811523,
+    "stress": false,
+    "summary": "The data indicates a grave medical emergency demanding immediate intervention by qualified medical personnel. The combination of exceedingly low EDA, a complete lack of cardiac activity, and a precipitous drop in body temperature strongly suggests a life-threatening physiological event necessitating urgent assessment and treatment by trained healthcare professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:02.197502",
+    "time_range": "02:16:55\u201302:18:02",
+    "hr": 0.0,
+    "eda": 0.030242678271606566,
+    "temp_change": -7.923999786376953,
+    "stress": false,
+    "summary": "The presented metrics strongly suggest a critical medical emergency necessitating immediate and expert intervention. The concurrence of an exceptionally low EDA level, a complete absence of any heart function, and a drastic and precipitous decline in body temperature points to a potentially life-threatening physiological event demanding urgent evaluation and treatment by qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:07.198099",
+    "time_range": "02:17:00\u201302:18:07",
+    "hr": 0.0,
+    "eda": 0.030242654932662844,
+    "temp_change": -8.05099868774414,
+    "stress": false,
+    "summary": "The data indicates a critical and potentially life-threatening medical emergency requiring immediate and highly skilled intervention. The combination of exceptionally low EDA, a complete absence of cardiac activity, and a precipitous and severe drop in body temperature strongly indicates a grave physiological event that necessitates urgent evaluation and treatment by experienced medical professionals equipped to handle such situations."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:12.264533",
+    "time_range": "02:17:05\u201302:18:12",
+    "hr": 0.0,
+    "eda": 0.030242627148206035,
+    "temp_change": -7.965000152587891,
+    "stress": false,
+    "summary": "The presented metrics point to a critical and likely life-threatening medical emergency that demands immediate and expert attention. The combination of an extremely low EDA reading, the complete absence of a heart rate, and a dramatic and rapid decline in body temperature strongly suggests a severe physiological event necessitating urgent evaluation, advanced life support, and treatment by highly qualified medical professionals."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:17.364144",
+    "time_range": "02:17:10\u201302:18:17",
+    "hr": 0.0,
+    "eda": 0.030242599363749227,
+    "temp_change": -7.980998992919922,
+    "stress": false,
+    "summary": "The provided data strongly indicates a critical, life-threatening medical emergency that requires immediate, highly skilled intervention. The concurrence of an exceptionally low EDA reading, a complete absence of heart activity, and a precipitous and substantial drop in body temperature strongly suggests a severe physiological event necessitating urgent, advanced medical assessment, stabilization, and treatment by qualified and experienced medical professionals capable of managing such crises."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:22.398242",
+    "time_range": "02:17:15\u201302:18:22",
+    "hr": 0.0,
+    "eda": 0.030242577691872916,
+    "temp_change": -1.177999496459961,
+    "stress": false,
+    "summary": "The data suggests a state of very low arousal and stress, possibly indicating relaxation, sleep, or even a state of unresponsiveness. However, the significant temperature decrease, though not as drastic as some previous examples, warrants careful observation to rule out any underlying medical concerns."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:27.463193",
+    "time_range": "02:17:21\u201302:18:27",
+    "hr": 0.0,
+    "eda": 0.030242569912225008,
+    "temp_change": 0.0010013580322265625,
+    "stress": false,
+    "summary": "The subject is likely in a very relaxed or possibly unresponsive state. The incredibly low EDA and absent heart rate suggest minimal to no stress or arousal, while the stable temperature indicates a lack of immediate physiological change."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:32.563141",
+    "time_range": "02:17:26\u201302:18:32",
+    "hr": 0.0,
+    "eda": 0.03024254768465956,
+    "temp_change": 0.03800010681152344,
+    "stress": false,
+    "summary": "The metrics indicate a state of deep relaxation or potential unresponsiveness. The extremely low EDA and lack of heart rate suggest minimal stress or arousal, and the negligible temperature change further supports this assessment."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:37.605279",
+    "time_range": "02:17:31\u201302:18:37",
+    "hr": 0.0,
+    "eda": 0.03024253434812029,
+    "temp_change": 0.0279998779296875,
+    "stress": false,
+    "summary": "The person is probably in a very calm or perhaps unresponsive condition. The minimal EDA coupled with the absence of a heart rate signals very low levels of stress or arousal, and the almost unchanged temperature reading lends further support."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:42.606095",
+    "time_range": "02:17:36\u201302:18:42",
+    "hr": 0.0,
+    "eda": 0.030242536015187702,
+    "temp_change": -0.017999649047851562,
+    "stress": false,
+    "summary": "The individual appears to be in a state of deep relaxation or potential unresponsiveness, as indicated by the minimal EDA and lack of heart rate. The slight temperature decrease is minor, but should still be monitored in conjunction with the other readings."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:47.673863",
+    "time_range": "02:17:41\u201302:18:47",
+    "hr": 0.0,
+    "eda": 0.03024251267624398,
+    "temp_change": -0.062000274658203125,
+    "stress": false,
+    "summary": "This data suggests a state of profound relaxation, possibly bordering on unresponsiveness. The minimal EDA activity and lack of heart rate, along with the slight drop in temperature, indicate a very low level of physiological arousal."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:52.706021",
+    "time_range": "02:17:46\u201302:18:52",
+    "hr": 0.0,
+    "eda": 0.03024250545228521,
+    "temp_change": 0.018999099731445312,
+    "stress": false,
+    "summary": "The data suggests a state of extreme relaxation or possibly unresponsiveness. The very low EDA and zero heart rate indicate minimal stress or arousal, further supported by the stable temperature reading."
+  },
+  {
+    "timestamp": "2025-03-23T02:18:57.823213",
+    "time_range": "02:17:51\u201302:18:57",
+    "hr": 0.0,
+    "eda": 0.030242531569674613,
+    "temp_change": 0.0279998779296875,
+    "stress": false,
+    "summary": "The metrics indicate a very relaxed, possibly unresponsive, state. The combination of extremely low EDA and absent heart rate suggests minimal stress or arousal, with a stable temperature indicating no immediate physiological change."
+  },
+  {
+    "timestamp": "2025-03-23T02:19:02.873214",
+    "time_range": "02:17:56\u201302:19:02",
+    "hr": 0.0,
+    "eda": 0.030242541016389925,
+    "temp_change": 0.07600021362304688,
+    "stress": false,
+    "summary": "The subject is likely deeply relaxed or possibly unresponsive based on the presented data. The very low EDA and zero heart rate strongly suggest minimal stress or arousal, while the minor temperature fluctuation indicates a stable physiological state."
+  },
+  {
+    "timestamp": "2025-03-23T02:19:07.890584",
+    "time_range": "02:18:01\u201302:19:07",
+    "hr": 0.0,
+    "eda": 0.030242527679850657,
+    "temp_change": 0.0039997100830078125,
+    "stress": false,
+    "summary": "The data indicates a state of extreme relaxation or potential unresponsiveness. The combination of minimal EDA, absence of a heart rate, and stable temperature suggests negligible stress or arousal."
+  },
+  {
+    "timestamp": "2025-03-23T02:19:12.970907",
+    "time_range": "02:18:06\u201302:19:12",
+    "hr": 0.0,
+    "eda": 0.030242521011581022,
+    "temp_change": 0.05700111389160156,
+    "stress": false,
+    "summary": "The data suggests a state of deep relaxation or possible unresponsiveness. The very low EDA and zero heart rate indicate minimal stress or arousal, which is further reinforced by the stable temperature."
+  },
+  {
+    "timestamp": "2025-03-23T02:19:18.020832",
+    "time_range": "02:18:11\u201302:19:18",
+    "hr": 0.0,
+    "eda": 0.03024251156486571,
+    "temp_change": 0.05900001525878906,
+    "stress": false,
+    "summary": "The individual appears to be in a state of profound relaxation, possibly bordering on unresponsiveness, based on these metrics. The minimal EDA and zero heart rate suggest exceedingly low stress or arousal, further corroborated by the relatively stable temperature reading."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:00.909306",
+    "time_range": "02:31:55\u201302:32:00",
+    "eda": 1.0459913886015249,
+    "ppg_std": 56588.38614876024,
+    "temp_change": -3.842000961303711,
+    "stress": false,
+    "summary": "The user exhibits moderate arousal with some variability based on the EDA data. The high PPG standard deviation coupled with a significant temperature decrease suggests a possible stress response or shift in physiological state."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:05.979387",
+    "time_range": "02:31:55\u201302:32:05",
+    "eda": 0.7729403754515994,
+    "ppg_std": 57876.16557284301,
+    "temp_change": -3.2180004119873047,
+    "stress": false,
+    "summary": "The EDA data indicates a relatively calm state with moderate variability. However, the elevated PPG standard deviation and decrease in temperature suggest the possibility of underlying stress or physiological regulation occurring."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:11.008873",
+    "time_range": "02:31:55\u201302:32:11",
+    "eda": 0.8626620522601173,
+    "ppg_std": 59183.47134377358,
+    "temp_change": 4.887998580932617,
+    "stress": false,
+    "summary": "The user shows a moderate level of arousal and notable fluctuations in EDA. The high PPG standard deviation combined with a substantial increase in temperature may indicate heightened emotional excitement or a shift towards increased physiological activation."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:16.009715",
+    "time_range": "02:31:55\u201302:32:16",
+    "eda": 36.34193064259942,
+    "ppg_std": 57951.65056708845,
+    "temp_change": 3.8210010528564453,
+    "stress": false,
+    "summary": "The EDA data shows an extremely high average and variability, suggesting a very strong state of arousal and frequent, intense reactions. The elevated PPG standard deviation and increased temperature further support a profile indicative of significant stress, anxiety, or intense emotional experience."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:21.107828",
+    "time_range": "02:31:55\u201302:32:21",
+    "eda": 31.366473089150727,
+    "ppg_std": 55527.02971305765,
+    "temp_change": 4.038999557495117,
+    "stress": false,
+    "summary": "The user is experiencing very high arousal with extreme fluctuations in their EDA signal, indicating a state of heightened reactivity. Combined with a large PPG standard deviation and increase in temperature, these metrics suggest significant stress, anxiety, or intense emotional activation."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:26.108099",
+    "time_range": "02:31:55\u201302:32:26",
+    "eda": 27.895254399447506,
+    "ppg_std": 52941.0617852456,
+    "temp_change": 4.241998672485352,
+    "stress": false,
+    "summary": "The user's EDA reveals high arousal with substantial variability, indicating considerable reactivity to stimuli. The combination of a large PPG standard deviation and increased temperature suggests a state of heightened stress, anxiety, or strong emotional response."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:31.173743",
+    "time_range": "02:31:55\u201302:32:31",
+    "eda": 25.180363878973395,
+    "ppg_std": 50526.74040769037,
+    "temp_change": 4.336000442504883,
+    "stress": false,
+    "summary": "The data points to a state of high arousal with significant fluctuations, as indicated by the EDA measures. The high PPG standard deviation and increased temperature further suggest the presence of substantial stress, anxiety, or strong emotional activation."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:36.174008",
+    "time_range": "02:31:55\u201302:32:36",
+    "eda": 23.06193367505052,
+    "ppg_std": 48415.01485142278,
+    "temp_change": 4.448999404907227,
+    "stress": false,
+    "summary": "The user is experiencing elevated arousal with considerable variability in their EDA, reflecting a high degree of reactivity. Coupled with a large PPG standard deviation and a temperature increase, this indicates significant stress, anxiety, or heightened emotional state."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:41.240865",
+    "time_range": "02:31:55\u201302:32:41",
+    "eda": 21.294600843756523,
+    "ppg_std": 46433.26527736079,
+    "temp_change": 5.668001174926758,
+    "stress": false,
+    "summary": "The EDA suggests a highly aroused state with notable fluctuations, showing considerable reactivity. The combination of elevated PPG standard deviation and a significant temperature increase strongly points to substantial stress, anxiety, or heightened emotional activation."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:46.273201",
+    "time_range": "02:31:55\u201302:32:46",
+    "eda": 19.858195832839137,
+    "ppg_std": 44683.65564571406,
+    "temp_change": 5.829000473022461,
+    "stress": false,
+    "summary": "The user's EDA indicates a high level of arousal with substantial variability, suggesting sensitivity to stimuli. The elevated PPG standard deviation and a large temperature increase further indicate a state of significant stress, anxiety, or a strong emotional response."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:51.340069",
+    "time_range": "02:31:55\u201302:32:51",
+    "eda": 18.6073543608289,
+    "ppg_std": 43057.51334192689,
+    "temp_change": 5.011999130249023,
+    "stress": false,
+    "summary": "The user shows high physiological arousal with considerable variability in EDA, indicating strong reactions to their environment. Coupled with an elevated PPG standard deviation and a notable temperature increase, this data suggests significant stress, anxiety, or heightened emotional experience."
+  },
+  {
+    "timestamp": "2025-03-23T02:32:56.406790",
+    "time_range": "02:31:55\u201302:32:56",
+    "eda": 17.32270288922812,
+    "ppg_std": 46755.58551269226,
+    "temp_change": -0.26799964904785156,
+    "stress": false,
+    "summary": "The user is experiencing high physiological arousal and frequent fluctuations in EDA, demonstrating significant reactivity. Combined with a high PPG standard deviation and a slight temperature decrease, these metrics suggest significant stress, anxiety, or an emotionally demanding state."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:01.489366",
+    "time_range": "02:31:55\u201302:33:01",
+    "eda": 16.14378450967616,
+    "ppg_std": 45727.523717962584,
+    "temp_change": -0.24699974060058594,
+    "stress": false,
+    "summary": "The user's EDA indicates high arousal with considerable variability, suggesting sensitivity and reactivity. The combination of a high PPG standard deviation and a slight temperature decrease may point towards ongoing stress, anxiety, or a mentally taxing situation."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:06.489424",
+    "time_range": "02:32:00\u201302:33:06",
+    "eda": 15.136651896893119,
+    "ppg_std": 44789.01073376231,
+    "temp_change": -0.1230010986328125,
+    "stress": false,
+    "summary": "The EDA data reveals a state of high arousal with notable fluctuations, indicating a responsive and potentially reactive individual. Coupled with an elevated PPG standard deviation and a minimal temperature decrease, the findings suggest the presence of sustained stress, anxiety, or a mentally demanding experience."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:11.521800",
+    "time_range": "02:32:05\u201302:33:11",
+    "eda": 14.249372220233047,
+    "ppg_std": 43910.62644596889,
+    "temp_change": -0.13800048828125,
+    "stress": false,
+    "summary": "The user exhibits high arousal and significant EDA variability, indicating sensitivity to stimuli and reactivity. The elevated PPG standard deviation coupled with a slight temperature decrease suggests the presence of ongoing stress, anxiety, or a cognitively demanding situation."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:16.522148",
+    "time_range": "02:32:10\u201302:33:16",
+    "eda": 13.446217439820792,
+    "ppg_std": 43158.13956604202,
+    "temp_change": -0.034000396728515625,
+    "stress": false,
+    "summary": "The EDA indicates a state of high arousal with marked variability, suggesting notable reactivity and sensitivity to environmental factors. Combined with the elevated PPG standard deviation and near-stable temperature, this suggests the presence of sustained stress, underlying anxiety, or a persistent mental workload."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:21.587637",
+    "time_range": "02:32:15\u201302:33:21",
+    "eda": 12.743649306672962,
+    "ppg_std": 42409.9441100986,
+    "temp_change": 0.15200042724609375,
+    "stress": false,
+    "summary": "The user is experiencing high physiological arousal with significant EDA variability, demonstrating sensitivity and responsiveness. The elevated PPG standard deviation, combined with a slight temperature increase, suggests ongoing stress, underlying anxiety, or a continued cognitive demand."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:26.654728",
+    "time_range": "02:32:20\u201302:33:26",
+    "eda": 12.09974198838494,
+    "ppg_std": 41664.48199405091,
+    "temp_change": 0.18199920654296875,
+    "stress": false,
+    "summary": "The EDA data reflects a state of high arousal accompanied by significant variability, indicating reactivity and sensitivity. Coupled with a relatively high PPG standard deviation and a slight increase in temperature, these metrics may point toward ongoing stress, underlying anxiety, or a continued cognitive load."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:31.654276",
+    "time_range": "02:32:25\u201302:33:31",
+    "eda": 11.518918337189893,
+    "ppg_std": 40779.97469927875,
+    "temp_change": 0.19899940490722656,
+    "stress": false,
+    "summary": "The user shows elevated arousal with considerable EDA variability, highlighting sensitivity and reactivity to stimuli. Coupled with the moderately high PPG standard deviation and a slight temperature increase, the data may suggest persistent stress, underlying anxiety, or a demanding cognitive state."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:36.687070",
+    "time_range": "02:32:30\u201302:33:36",
+    "eda": 11.01248547825166,
+    "ppg_std": 39931.07020054948,
+    "temp_change": 0.2569999694824219,
+    "stress": false,
+    "summary": "The user exhibits relatively high arousal with noticeable variability in their EDA, indicating sensitivity and responsiveness to environmental factors. Considering the moderately elevated PPG standard deviation and slight temperature increase, the data could suggest lingering stress, background anxiety, or a sustained cognitive effort."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:41.719952",
+    "time_range": "02:32:35\u201302:33:41",
+    "eda": 10.531164516509572,
+    "ppg_std": 39120.66442228162,
+    "temp_change": 0.35000038146972656,
+    "stress": false,
+    "summary": "The user displays heightened arousal levels and substantial EDA variability, reflecting sensitivity and potential reactivity to their surroundings. The moderately elevated PPG standard deviation, coupled with a slight increase in temperature, may be indicative of ongoing stress, subtle anxiety, or a persistent cognitive demand."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:46.720013",
+    "time_range": "02:32:40\u201302:33:46",
+    "eda": 10.095883591124352,
+    "ppg_std": 43373.68102444527,
+    "temp_change": -5.364999771118164,
+    "stress": false,
+    "summary": "The user presents elevated arousal with noticeable EDA variability, indicating sensitivity and potential reactivity. The relatively high PPG standard deviation paired with a significant temperature decrease suggests the possibility of a notable stress response, emotional shift, or a physiological reaction to the environment."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:51.720450",
+    "time_range": "02:32:45\u201302:33:51",
+    "eda": 9.700829794408047,
+    "ppg_std": 52563.765430752705,
+    "temp_change": -6.0279998779296875,
+    "stress": false,
+    "summary": "The user shows elevated arousal and EDA variability, suggesting a responsive and potentially reactive state. The high PPG standard deviation combined with a substantial temperature drop strongly suggests a significant stress response, a marked emotional shift, or a considerable physiological reaction occurring."
+  },
+  {
+    "timestamp": "2025-03-23T02:33:56.753389",
+    "time_range": "02:32:50\u201302:33:56",
+    "eda": 9.328299289740587,
+    "ppg_std": 59210.6690278596,
+    "temp_change": -6.003000259399414,
+    "stress": false,
+    "summary": "The user exhibits elevated arousal and noticeable EDA variability, indicating sensitivity and reactivity. The very high PPG standard deviation in conjunction with a significant temperature decrease strongly points toward a substantial stress response, intense emotional change, or a major physiological adjustment."
+  },
+  {
+    "timestamp": "2025-03-23T02:34:01.753299",
+    "time_range": "02:32:55\u201302:34:01",
+    "eda": 8.976632952746483,
+    "ppg_std": 64289.666139789115,
+    "temp_change": -6.0410003662109375,
+    "stress": false,
+    "summary": "The user displays high arousal with considerable EDA variability, signaling sensitivity and reactivity to their environment. The extremely high PPG standard deviation, coupled with a significant temperature drop, strongly indicates a substantial stress response, intense emotional shift, or a major physiological adjustment in the user."
+  },
+  {
+    "timestamp": "2025-03-23T02:34:06.785439",
+    "time_range": "02:33:00\u201302:34:06",
+    "eda": 8.663182753663047,
+    "ppg_std": 68289.07746101572,
+    "temp_change": -6.059000015258789,
+    "stress": false,
+    "summary": "The user demonstrates elevated arousal and EDA variability, suggesting sensitivity and a responsive physiological state. The extraordinarily high PPG standard deviation, accompanied by a substantial temperature decrease, powerfully suggests a significant stress response, a profound emotional shift, or a major physiological adaptation occurring within the user."
+  },
+  {
+    "timestamp": "2025-03-23T02:34:11.851559",
+    "time_range": "02:33:05\u201302:34:11",
+    "eda": 8.359205963736741,
+    "ppg_std": 71556.01969063547,
+    "temp_change": -6.108999252319336,
+    "stress": false,
+    "summary": "The user shows heightened physiological arousal and substantial EDA variability, indicating sensitivity and potential reactivity. The extremely elevated PPG standard deviation, combined with a marked decrease in temperature, strongly suggests a significant stress response, a profound emotional shift, or a substantial physiological adjustment affecting the user."
+  },
+  {
+    "timestamp": "2025-03-23T02:40:27.030904",
+    "time_range": "02:40:21\u201302:40:27",
+    "eda": 1.1077285868150217,
+    "ppg_std": 40358.13186248464,
+    "temp_change": -7.203998565673828,
+    "stress": false,
+    "summary": "The individual exhibits relatively low average EDA (1.1077) with moderate variability (0.8265). However, the extremely high PPG standard deviation (40358.13) and significant temperature decrease (-7.20\u00b0C) suggest a potential state of high anxiety or distress."
+  },
+  {
+    "timestamp": "2025-03-23T02:40:32.046344",
+    "time_range": "02:40:21\u201302:40:32",
+    "eda": 0.8165157307946199,
+    "ppg_std": 43426.138580315455,
+    "temp_change": -6.528999328613281,
+    "stress": false,
+    "summary": "The individual's average EDA is low (0.8165), but the variability is moderate (0.8529). Combined with a very high PPG standard deviation (43426.14) and a substantial temperature decrease (-6.53\u00b0C), this strongly suggests a state of significant stress or emotional arousal."
+  }
+]

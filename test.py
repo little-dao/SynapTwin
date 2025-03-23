@@ -1,16 +1,18 @@
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_server import BlockingOSCUDPServer
+import asyncio
+import edge_tts
+import tempfile
+import os
+from playsound import playsound  # pip install playsound==1.2.2
 
-def handle_all(address, *args):
-    print(f"{address}: {args}")
+async def speak(text):
+    print(f"🔊 Assistant: {text}")
+    # Save speech to temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmpfile:
+        output_path = tmpfile.name
 
-dispatcher = Dispatcher()
-dispatcher.set_default_handler(handle_all)  # <-- Catch all messages, no filtering
+    communicate = edge_tts.Communicate(text, voice="en-US-GuyNeural")
+    await communicate.save(output_path)
 
-ip = "127.0.0.1"
-port = 12345
-print(f"Listening on {ip}:{port}")
-server = BlockingOSCUDPServer((ip, port), dispatcher)
-server.serve_forever()
-
-# tell the person if they are stressed or not and what they can do to help
+    playsound(output_path)
+    os.remove(output_path)  # Cleanup
+asyncio.run(speak("Hey there! Just checking in. How are you feeling right now?"))
