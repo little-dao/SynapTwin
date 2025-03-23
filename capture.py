@@ -8,18 +8,16 @@ import datetime
 import time
 import json
 import os
-import platform
 from dotenv import load_dotenv
 import google.generativeai as genai
 import speech_recognition as sr
-import pyttsx3
-
-
 import asyncio
 import edge_tts
 import tempfile
 import os
-from playsound import playsound  # pip install playsound==1.2.2
+from playsound import playsound  
+import matplotlib.pyplot as plt
+from scipy.signal import find_peaks  # For heart rate estimation
 
 # ===== LOAD ENV =====
 load_dotenv()
@@ -134,8 +132,10 @@ def chat_with_user(features):
                     if any(word in user_input.lower() for word in ["i'm fine", "i'm okay", "quit", "thanks","thank you","bye bye"]):
                         speak("I'm glad you're feeling better. Take care, and I'm always here if you need to talk.")
                         
-                        # Print the emotion timeline when conversation ends
-                        print_emotion_timeline(segment_logs)
+                        # Generate and display complete summary with graphs and timeline
+                        print("\n🔍 Generating session summary and visualizations...")
+                        graph_path = show_graph_summary(segment_logs, data_buffers)
+                        print(f"📊 Analysis complete. You can view the graphs at: {graph_path}")
                         break
 
                     # Gemini responds
@@ -217,6 +217,220 @@ def calibration():
     sample_PPG_Std = features["ppg_std"]
     sample_THERM_Mean = features["temp_change"]
     print("Calibration complete. Monitoring now.")
+def generate_biometric_graphs(segment_logs, data_buffers, save_path="biometric_graphs"):
+    """
+    Generates and saves graphs for EDA, heart rate (from PPG), and temperature data.
+    
+    Args:
+        segment_logs (list): List of segment data dictionaries
+        data_buffers (dict): Dictionary containing the raw data buffers
+        save_path (str): Directory to save the generated graphs
+    """
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import os
+    from datetime import datetime
+    
+    # Create directory if it doesn't exist
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    
+    # Generate timestamp for filenames
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Convert deque to numpy arrays for plotting
+    eda_data = np.array(list(data_buffers["EDA"]))
+    ppg_data = np.array(list(data_buffers["PPG:IR"]))
+    therm_data = np.array(list(data_buffers["THERM"]))
+    
+    # Ensure all arrays have the same length (use the minimum length)
+    min_length = min(len(eda_data), len(ppg_data), len(therm_data))
+    eda_data = eda_data[:min_length]
+    ppg_data = ppg_data[:min_length]
+    therm_data = therm_data[:min_length]
+    
+    # Create time axis (assuming constant sampling rate)
+    time_points = np.linspace(0, min_length/10, min_length)  # Assuming 10Hz sampling
+    
+    # Create subplots
+    fig, axes = plt.subplots(3, 1, figsize=(12, 15))
+    fig.suptitle('Biometric Data Visualization', fontsize=16)
+    
+    # Plot EDA
+    axes[0].plot(time_points, eda_data, 'b-', linewidth=1)
+    axes[0].set_title('Electrodermal Activity (EDA)')
+    axes[0].set_ylabel('Microsiemens (μS)')
+    axes[0].set_xlabel('Time (seconds)')
+    axes[0].grid(True)
+    
+    # Add markers for emotional events
+    if segment_logs:
+        # Extract segment boundaries
+        segment_times = []
+        for segment in segment_logs:
+            # Using index in the overall data buffer as an approximation
+            idx = len(segment_times) * int(min_length / max(len(segment_logs), 1))
+            if idx < len(time_points):
+                segment_times.append(time_points[idx])
+        
+        # Mark segments on the EDA plot
+        for i, t in enumerate(segment_times):
+            if i < len(segment_logs):
+                eda_val = segment_logs[i]["eda_mean"]
+                axes[0].axvline(x=t, color='r', linestyle='--', alpha=0.5)
+                axes[0].text(t, max(eda_data)*0.9, f"Segment {i+1}", 
+                            rotation=90, verticalalignment='top')
+    
+    # Plot heart rate approximation from PPG:IR
+    axes[1].plot(time_points, ppg_data, 'r-', linewidth=1)
+    axes[1].set_title('Photoplethysmography (PPG:IR)')
+    axes[1].set_ylabel('Signal Intensity')
+    axes[1].set_xlabel('Time (seconds)')
+    axes[1].grid(True)
+    
+    # Calculate and overlay a smoothed heart rate trend (very approximate)
+    if len(ppg_data) > 20:
+        try:
+            from scipy.signal import find_peaks
+            # Identify peaks (simplified)
+            peaks, _ = find_peaks(ppg_data, distance=5)
+            if len(peaks) > 1:
+                # Ensure peaks are within bounds
+                peaks = peaks[peaks < len(time_points)]
+                
+                if len(peaks) > 1:  # Check again after filtering
+                    # Estimate heart rate from peak distances
+                    peak_times = time_points[peaks]
+                    intervals = np.diff(peak_times)
+                    heart_rates = 60 / intervals  # Convert to BPM
+                    
+                    # Plot the estimated heart rates at correct positions
+                    hr_times = peak_times[:-1]  # Use time points at the peaks
+                    
+                    # Make sure both arrays have the same length
+                    if len(hr_times) == len(heart_rates):
+                        ax2 = axes[1].twinx()
+                        ax2.plot(hr_times, heart_rates, 'g-', linewidth=2, alpha=0.7)
+                        ax2.set_ylabel('Estimated BPM', color='g')
+                        ax2.tick_params(axis='y', colors='g')
+        except Exception as e:
+            print(f"Heart rate estimation error: {e}")
+    
+    # Plot temperature
+    axes[2].plot(time_points, therm_data, 'g-', linewidth=1)
+    axes[2].set_title('Temperature')
+    axes[2].set_ylabel('Temperature (°C)')
+    axes[2].set_xlabel('Time (seconds)')
+    axes[2].grid(True)
+    
+    # Highlight temperature change points
+    if len(therm_data) > 10:
+        try:
+            # Calculate rate of change
+            temp_diff = np.diff(therm_data)
+            # Find significant changes
+            threshold = np.std(temp_diff) * 2
+            significant_changes = np.where(np.abs(temp_diff) > threshold)[0]
+            
+            # Ensure indices are within bounds
+            significant_changes = significant_changes[significant_changes < len(time_points) - 1]
+            
+            # Mark significant temperature changes
+            for idx in significant_changes:
+                axes[2].axvline(x=time_points[idx], color='m', linestyle='--', alpha=0.3)
+        except Exception as e:
+            print(f"Temperature analysis error: {e}")
+    
+    # Add annotation for baseline and significant events
+    if segment_logs:
+        baseline_eda = segment_logs[0]["eda_mean"]
+        axes[0].axhline(y=baseline_eda, color='g', linestyle='-', alpha=0.5, label=f'Baseline: {baseline_eda:.2f} μS')
+        axes[0].legend()
+        
+        # Mark highest arousal
+        eda_means = [entry["eda_mean"] for entry in segment_logs]
+        max_idx = np.argmax(eda_means)
+        if 0 <= max_idx < len(segment_times):
+            max_t = segment_times[max_idx]
+            axes[0].plot(max_t, eda_means[max_idx], 'ro', markersize=8)
+            axes[0].text(max_t, eda_means[max_idx], 'Peak Arousal', 
+                        fontsize=10, verticalalignment='bottom')
+    
+    # Tight layout and save
+    plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust for title
+    
+    # Save individual plots
+    plt.savefig(f"{save_path}/biometric_overview_{timestamp}.png", dpi=300)
+    
+    # Also save individual graphs for each metric
+    for i, metric in enumerate(['EDA', 'PPG_Heart_Rate', 'Temperature']):
+        plt.figure(figsize=(10, 6))
+        if i == 0:
+            plt.plot(time_points, eda_data, 'b-', linewidth=1)
+            plt.title('Electrodermal Activity (EDA)')
+            plt.ylabel('Microsiemens (μS)')
+            
+            if segment_logs:
+                plt.axhline(y=baseline_eda, color='g', linestyle='-', alpha=0.5, 
+                           label=f'Baseline: {baseline_eda:.2f} μS')
+                plt.legend()
+                
+        elif i == 1:
+            plt.plot(time_points, ppg_data, 'r-', linewidth=1)
+            plt.title('Photoplethysmography (PPG:IR)')
+            plt.ylabel('Signal Intensity')
+        else:
+            plt.plot(time_points, therm_data, 'g-', linewidth=1)
+            plt.title('Temperature')
+            plt.ylabel('Temperature (°C)')
+        
+        plt.xlabel('Time (seconds)')
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig(f"{save_path}/{metric}_{timestamp}.png", dpi=300)
+        plt.close()
+    
+    print(f"Graphs saved to {save_path}/ directory")
+    return f"{save_path}/biometric_overview_{timestamp}.png"
+
+def show_graph_summary(segment_logs, data_buffers):
+    """
+    Generate and display a summary of the biometric data including graphs and timeline
+    """
+    # Generate timeline text
+    timeline_text = generate_emotion_timeline(segment_logs)
+    
+    # Generate and save graphs
+    graph_path = generate_biometric_graphs(segment_logs, data_buffers)
+    
+    # Create a summary report
+    report = f"""
+=====================================================================
+                       BIOMETRIC SESSION SUMMARY
+=====================================================================
+
+{timeline_text}
+
+---------------------------------------------------------------------
+GRAPHS GENERATED:
+- EDA (Electrodermal Activity): Measures skin conductance related to emotional arousal
+- PPG (Photoplethysmography): Captures blood volume changes (related to heart rate)
+- Temperature: Body temperature fluctuations
+
+Graphs saved to: {graph_path}
+=====================================================================
+"""
+    
+    print(report)
+    
+    # Save the report
+    with open("session_summary.txt", "w") as f:
+        f.write(report)
+    
+    print("Complete session summary saved to session_summary.txt")
+    
+    # Return path to the main graph for potential display
+    return graph_path
 
 def generate_emotion_timeline(segment_logs):
     """

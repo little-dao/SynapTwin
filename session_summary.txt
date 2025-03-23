@@ -1,0 +1,37 @@
+
+=====================================================================
+                       BIOMETRIC SESSION SUMMARY
+=====================================================================
+
+📊 EMOTIONAL STATE TIMELINE 📊
+
+08:34–08:34: Baseline (↓ 0.0% from baseline)
+
+08:34–08:34: Baseline (↓ 0.0% from baseline)
+
+08:34–08:34: Calm/Relaxed (↓ 0.0% from baseline)
+
+08:34–08:34: Calm/Relaxed (↓ 0.0% from baseline)
+
+08:34–08:34: Calm/Relaxed (↓ 0.0% from baseline)
+
+08:34–08:34: Highly Aroused/Stressed (↑ 245.8% from baseline)
+
+08:34–08:34: Highly Aroused/Stressed (↑ 1527.8% from baseline)
+
+08:34–08:34: Highly Aroused/Stressed (↑ 2816.1% from baseline)
+
+SUMMARY:
+• Peak arousal occurred at 08:34–08:34
+• Lowest arousal occurred at 08:34–08:34
+• Session duration: 08:34 to 08:34
+
+
+---------------------------------------------------------------------
+GRAPHS GENERATED:
+- EDA (Electrodermal Activity): Measures skin conductance related to emotional arousal
+- PPG (Photoplethysmography): Captures blood volume changes (related to heart rate)
+- Temperature: Body temperature fluctuations
+
+Graphs saved to: biometric_graphs/biometric_overview_20250323_083503.png
+=====================================================================
