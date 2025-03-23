@@ -101,59 +101,80 @@ def extract_features():
         "end_time": timestamp_buffer[-1].strftime("%H:%M")
     }
 
-# def calibrate_thresholds():
-#     #speak("Starting calibration for thirty seconds. Please remain calm and relaxed.")
-#     start_time = time.time()
-#     samples = []
-#     while len(samples) < CALIBRATION_SAMPLES and time.time() - start_time < 5:
-#         time.sleep(1)
-#         features = extract_features()
-#         if features:
-#             print(features)
-#             samples.append(features)
-#             baseline_samples["EDA"].append(features["eda_mean"])
-#             baseline_samples["PPG"].append(features["ppg_std"])
-#             baseline_samples["TEMP"].append(features["temp_change"])
-#             print(f"[{len(samples)}/{CALIBRATION_SAMPLES}] Calibrating...")
-#             print(samples)
+
+# def chat_with_user(features):
+#     recognizer = sr.Recognizer()
+#     with sr.Microphone() as source:
+#         while True:
+#             prompt = f"""
+#             User now detected having higher EDA than usual with regard to sample 20s data. Could you initiate a conversation with the user?
+#             The response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.
+#             """
+#             first_msg = chat.send_message(prompt).text
+#             speak(first_msg)
 #
-#     if len(samples) < 10:
-#         speak("Calibration failed: not enough clean data collected.")
-#         return
-#
-#     global baseline_stats
-#     baseline_stats = {
-#         "EDA": (np.mean(baseline_samples["EDA"]), np.std(baseline_samples["EDA"])),
-#         "PPG": (np.mean(baseline_samples["PPG"]), np.std(baseline_samples["PPG"])),
-#         "TEMP": (np.mean(baseline_samples["TEMP"]), np.std(baseline_samples["TEMP"]))
-#     }
-#
-#     speak("Calibration complete. Monitoring now.")
+#             print("Listening...")
+#             recognizer.adjust_for_ambient_noise(source)
+#             audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
+#             try:
+#                 user_input = recognizer.recognize_google(audio)
+#                 if user_input.lower() in ["stop", "exit", "quit"]:
+#                     break
+#                 follow_up = chat.send_message("Users follow up, your response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.\n" + user_input).text
+#                 speak(follow_up)
+#             except sr.UnknownValueError:
+#                 speak("Sorry, I didn't catch that. Could you please repeat?")
+#             except sr.RequestError as e:
+#                 speak(f"Could not request results; {e}")
+
 
 def chat_with_user(features):
     recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        while True:
-            prompt = f"""
-            User now detected having higher EDA than usual with regard to sample 20s data. Could you initiate a conversation with the user?
-            The response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.
-            """
-            first_msg = chat.send_message(prompt).text
-            speak(first_msg)
+    mic = sr.Microphone()
 
-            print("Listening...")
+    try:
+        # 1. First message from Gemini
+        prompt = f"""
+        User now detected having higher EDA than usual with regard to 20s of biometric data. 
+        Please initiate a gentle and empathetic conversation, checking how they're feeling and offering support.
+        Your tone must feel human and caring. Make this a sentence or two.
+        """
+        first_msg = chat.send_message(prompt).text
+        speak(first_msg)
+
+        # 2. Chat loop
+        with mic as source:
             recognizer.adjust_for_ambient_noise(source)
-            audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
-            try:
-                user_input = recognizer.recognize_google(audio)
-                if user_input.lower() in ["stop", "exit", "quit"]:
+            while True:
+                speak("I'm listening... You can say 'stop' anytime.")
+                print("🎤 Listening for user input...")
+
+                try:
+                    audio = recognizer.listen(source, timeout=6, phrase_time_limit=10)
+                    user_input = recognizer.recognize_google(audio)
+                    print(f"🧑 User said: {user_input}")
+
+                    # Check for exit signal
+                    if any(word in user_input.lower() for word in ["stop", "i'm fine", "i'm okay", "quit", "thanks"]):
+                        speak("I'm glad you're feeling better. Take care, and I'm always here if you need to talk.")
+                        break
+
+                    # Gemini responds
+                    follow_up_prompt = f"The user responded: \"{user_input}\". Continue the human-like, empathetic conversation. One sentence or two."
+                    follow_up = chat.send_message(follow_up_prompt).text
+                    speak(follow_up)
+
+                except sr.UnknownValueError:
+                    speak("Sorry, I didn't quite catch that. Could you try again?")
+                except sr.WaitTimeoutError:
+                    speak("Hmm, I didn't hear anything. Want to try again?")
+                except sr.RequestError as e:
+                    speak(f"Sorry, something went wrong with speech recognition. Error: {e}")
                     break
-                follow_up = chat.send_message("Users follow up, your response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.\n" + user_input).text
-                speak(follow_up)
-            except sr.UnknownValueError:
-                speak("Sorry, I didn't catch that. Could you please repeat?")
-            except sr.RequestError as e:
-                speak(f"Could not request results; {e}")
+
+    except Exception as e:
+        print(f"💥 Error in chat_with_user: {e}")
+        speak("Something went wrong with the conversation. Let's try again later.")
 
 
 # def summarize_with_genai(features):
@@ -187,7 +208,7 @@ def process_segment():
         print(sample_EDA_Std)
         print(sample_EDA_Mean)
         print(features["eda_mean"])
-        if abs(features["eda_mean"])>((sample_EDA_Mean)+sample_EDA_Std**2):
+        if (features["eda_mean"])>((sample_EDA_Mean)+sample_EDA_Std**2):
             print("EDA anomaly detected")
             print(features)
             chat_with_user(features)
