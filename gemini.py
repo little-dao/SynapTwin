@@ -108,8 +108,7 @@ client = genai.Client(http_options=HttpOptions(api_version="v1"), api_key=os.get
 
 response = client.models.generate_content(
             model="gemini-2.0-flash-001",
-            contents=f"You are a helpful AI companion designed to help nurses and doctors, \
-                What would happen to this person if an aspirin dosage of 1 was given to them. Only answer in text, \
-                don't give me markdown:\n{data}")
+            contents=f"You are an AI companion with people. If something in the emotibit data looks off or seems like the person \
+            isn't feeling well, ask them about it and tell them what to do. Just give me text, don't use markdown:\n{data}")
 
 print(response.text)
