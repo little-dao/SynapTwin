@@ -1,3 +1,5 @@
+import random
+
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from collections import deque
@@ -25,7 +27,7 @@ load_dotenv()
 # ===== CONFIG =====
 IP = "127.0.0.1"
 PORT = 12345
-SEGMENT_DURATION = 5  # seconds
+SEGMENT_DURATION = 3  # seconds
 GEN_AI_MODEL = "gemini-2.0-flash-001"
 MAX_BUFFER = 18000
 JSON_LOG_PATH = "biometric_data.json"
@@ -102,31 +104,6 @@ def extract_features():
     }
 
 
-# def chat_with_user(features):
-#     recognizer = sr.Recognizer()
-#     with sr.Microphone() as source:
-#         while True:
-#             prompt = f"""
-#             User now detected having higher EDA than usual with regard to sample 20s data. Could you initiate a conversation with the user?
-#             The response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.
-#             """
-#             first_msg = chat.send_message(prompt).text
-#             speak(first_msg)
-#
-#             print("Listening...")
-#             recognizer.adjust_for_ambient_noise(source)
-#             audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
-#             try:
-#                 user_input = recognizer.recognize_google(audio)
-#                 if user_input.lower() in ["stop", "exit", "quit"]:
-#                     break
-#                 follow_up = chat.send_message("Users follow up, your response must be human-like, should not be easily identifiable as a machine, and should be empathetic and supportive.\n" + user_input).text
-#                 speak(follow_up)
-#             except sr.UnknownValueError:
-#                 speak("Sorry, I didn't catch that. Could you please repeat?")
-#             except sr.RequestError as e:
-#                 speak(f"Could not request results; {e}")
-
 
 def chat_with_user(features):
     recognizer = sr.Recognizer()
@@ -154,7 +131,7 @@ def chat_with_user(features):
                     print(f"🧑 User said: {user_input}")
 
                     # Check for exit signal
-                    if any(word in user_input.lower() for word in ["stop", "i'm fine", "i'm okay", "quit", "thanks"]):
+                    if any(word in user_input.lower() for word in ["i'm fine", "i'm okay", "quit", "thanks","thank you","bye bye"]):
                         speak("I'm glad you're feeling better. Take care, and I'm always here if you need to talk.")
                         break
 
@@ -175,15 +152,22 @@ def chat_with_user(features):
         print(f"💥 Error in chat_with_user: {e}")
         speak("Something went wrong with the conversation. Let's try again later.")
 
-
-# def summarize_with_genai(features):
-#     summary_prompt = f"""
-#     Summarize:
-#     - Avg EDA: {features['eda_mean']:.4f}, Variability: {features['eda_std']:.4f}
-#     - PPG STD: {features['ppg_std']:.2f}, Temp Change: {features['temp_change']:.2f}°C.
-#     Write 2-sentence feedback on stress or mental state.
-#     """
-#     return chat.send_message(summary_prompt).text.strip()
+def log_segment(features, summary=None, log_path="segment_data.json"):
+    log_entry = {
+        "timestamp": f"{features['start_time']}–{features['end_time']}",
+        "eda_mean": features['eda_mean'],
+        "eda_std": features['eda_std'],
+        "ppg_mean": features['ppg_mean'],
+        "ppg_std": features['ppg_std'],
+        "temp_change": features['temp_change'],
+        "summary": summary or "No summary"
+    }
+    segment_logs.append(log_entry)
+    try:
+        with open(log_path, "a") as f:
+            json.dump(segment_logs, f, indent=2)
+    except Exception as e:
+        print(f"⚠️ Failed to write log: {e}")
 
 def seg_features():
     eda=np.array(seg_buffers["EDA"])
@@ -204,6 +188,8 @@ def seg_features():
 
 def process_segment():
     features = seg_features()
+    if features:
+        log_segment(features)
     if features:
         print(sample_EDA_Std)
         print(sample_EDA_Mean)
@@ -228,7 +214,25 @@ def calibration():
     sample_THERM_Mean = features["temp_change"]
     print("Calibration complete. Monitoring now.")
 
+
+# def summarize_with_genai():
+#     try:
+#         with open("segment_data.json") as f:
+#             segments = json.load(f)
+#         summary = chat.send_message(json.dumps(segments)).text
+#         # sample = random.sample(segments, min(5, len(segments)))
+#         prompt = (f"User's log data from EMOTBIT Data:\n{json.dumps(summary)}\n"+
+#                   "User's historical EDA mean: "+str(sample_EDA_Mean)+"\n"+"User's historical EDA std: "+str(sample_EDA_Std)+"\n"+
+#                   f"Summarize and analysis these data, respond with a human-like, empathetic message. Three or four sentences.")
+#         response=chat.send_message(prompt).text
+#         speak(response)
+#         return None
+#     except Exception as e:
+#         print(f"⚠️ Failed to summarize with GenAI: {e}")
+#         return None
+
 def run_server():
+    start=time.time()
     dispatcher = Dispatcher()
     dispatcher.map("/EmotiBit/0/EDA", handle_data)
     dispatcher.map("/EmotiBit/0/PPG:IR", handle_data)
@@ -248,6 +252,9 @@ def run_server():
             if now - last >= SEGMENT_DURATION:
                 process_segment()
                 last = now
+            # if now - start >= 5:
+            #     summarize_with_genai()
+
     except KeyboardInterrupt:
         print("🛑 Server exited.")
 

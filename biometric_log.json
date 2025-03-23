@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp": "06:40\u201306:40",
+    "eda_mean": 0.6907169996574521,
+    "eda_std": 0.15492118822411569,
+    "ppg_mean": 145076.86,
+    "ppg_std": 19411.156279840725,
+    "temp_change": -0.7080001831054688,
+    "summary": "It looks like you experienced a bit of a cool down around 6:40, with your temperature decreasing slightly.  During that time your body was working to maintain a steady state, showing a moderate level of physiological activity, and your heart rate was also elevated."
+  }
+]
