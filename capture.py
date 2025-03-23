@@ -133,6 +133,9 @@ def chat_with_user(features):
                     # Check for exit signal
                     if any(word in user_input.lower() for word in ["i'm fine", "i'm okay", "quit", "thanks","thank you","bye bye"]):
                         speak("I'm glad you're feeling better. Take care, and I'm always here if you need to talk.")
+                        
+                        # Print the emotion timeline when conversation ends
+                        print_emotion_timeline(segment_logs)
                         break
 
                     # Gemini responds
@@ -151,7 +154,8 @@ def chat_with_user(features):
     except Exception as e:
         print(f"💥 Error in chat_with_user: {e}")
         speak("Something went wrong with the conversation. Let's try again later.")
-
+        
+        
 def log_segment(features, summary=None, log_path="segment_data.json"):
     log_entry = {
         "timestamp": f"{features['start_time']}–{features['end_time']}",
@@ -214,23 +218,92 @@ def calibration():
     sample_THERM_Mean = features["temp_change"]
     print("Calibration complete. Monitoring now.")
 
+def generate_emotion_timeline(segment_logs):
+    """
+    Generates a timeline summary of the user's emotional states throughout the session
+    based on the logged biometric data.
+    
+    Args:
+        segment_logs (list): List of segment data dictionaries
+    
+    Returns:
+        str: A formatted timeline of emotional states
+    """
+    import numpy as np
+    
+    if not segment_logs:
+        return "No emotion data has been recorded yet."
+    
+    # Define thresholds for emotional states based on EDA
+    def determine_emotional_state(eda_mean, eda_std, baseline_mean, baseline_std):
+        if eda_mean > (baseline_mean + baseline_std * 2):
+            return "Highly Aroused/Stressed"
+        elif eda_mean > (baseline_mean + baseline_std):
+            return "Moderately Aroused"
+        elif eda_mean < (baseline_mean - baseline_std):
+            return "Calm/Relaxed"
+        else:
+            return "Baseline"
+    
+    # Get the baseline values (from the first reading or from calibration)
+    baseline_mean = segment_logs[0]["eda_mean"]
+    baseline_std = segment_logs[0]["eda_std"]
+    
+    # Generate the timeline
+    timeline = "📊 EMOTIONAL STATE TIMELINE 📊\n\n"
+    
+    for entry in segment_logs:
+        timestamp = entry["timestamp"]
+        eda_mean = entry["eda_mean"]
+        eda_std = entry["eda_std"]
+        
+        emotional_state = determine_emotional_state(eda_mean, eda_std, baseline_mean, baseline_std)
+        
+        # Calculate percentage change from baseline
+        percent_change = ((eda_mean - baseline_mean) / baseline_mean) * 100
+        direction = "↑" if percent_change > 0 else "↓"
+        
+        # Add entry to timeline
+        timeline += f"{timestamp}: {emotional_state} ({direction} {abs(percent_change):.1f}% from baseline)\n"
+        
+        # Add additional context if available
+        if "summary" in entry and entry["summary"] != "No summary":
+            timeline += f"  Context: {entry['summary']}\n"
+        
+        timeline += "\n"
+    
+    # Add overall summary
+    timeline += "SUMMARY:\n"
+    all_eda_means = [entry["eda_mean"] for entry in segment_logs]
+    peak_idx = np.argmax(all_eda_means)
+    lowest_idx = np.argmin(all_eda_means)
+    
+    peak_time = segment_logs[peak_idx]["timestamp"] if 0 <= peak_idx < len(segment_logs) else "N/A"
+    lowest_time = segment_logs[lowest_idx]["timestamp"] if 0 <= lowest_idx < len(segment_logs) else "N/A"
+    
+    timeline += f"• Peak arousal occurred at {peak_time}\n"
+    timeline += f"• Lowest arousal occurred at {lowest_time}\n"
+    
+    if len(segment_logs) > 0:
+        timeline += f"• Session duration: {segment_logs[0]['timestamp'].split('–')[0]} to {segment_logs[-1]['timestamp'].split('–')[1]}\n"
+    
+    return timeline
 
-# def summarize_with_genai():
-#     try:
-#         with open("segment_data.json") as f:
-#             segments = json.load(f)
-#         summary = chat.send_message(json.dumps(segments)).text
-#         # sample = random.sample(segments, min(5, len(segments)))
-#         prompt = (f"User's log data from EMOTBIT Data:\n{json.dumps(summary)}\n"+
-#                   "User's historical EDA mean: "+str(sample_EDA_Mean)+"\n"+"User's historical EDA std: "+str(sample_EDA_Std)+"\n"+
-#                   f"Summarize and analysis these data, respond with a human-like, empathetic message. Three or four sentences.")
-#         response=chat.send_message(prompt).text
-#         speak(response)
-#         return None
-#     except Exception as e:
-#         print(f"⚠️ Failed to summarize with GenAI: {e}")
-#         return None
-
+def print_emotion_timeline(segment_logs):
+    """
+    Print the emotion timeline and save it to a file
+    """
+    timeline = generate_emotion_timeline(segment_logs)
+    print("\n" + "="*50)
+    print(timeline)
+    print("="*50)
+    
+    # Optionally save the timeline to a file
+    with open("emotion_timeline.txt", "w") as f:
+        f.write(timeline)
+    
+    print("Timeline saved to emotion_timeline.txt")
+    
 def run_server():
     start=time.time()
     dispatcher = Dispatcher()
@@ -254,9 +327,9 @@ def run_server():
                 last = now
             # if now - start >= 5:
             #     summarize_with_genai()
-
     except KeyboardInterrupt:
         print("🛑 Server exited.")
+
 
 if __name__ == "__main__":
     run_server()
