@@ -1,79 +1,281 @@
-import omni
-import asyncio
-from pxr import UsdShade, UsdGeom, Sdf, Gf
 
-stage = omni.usd.get_context().get_stage()
+import omni.usd
+import omni.kit.app
+from pxr import Usd, UsdGeom, UsdShade, Sdf, Gf
+import numpy as np
+import time
+import omni.kit.app # Ensure this is imported for shutdown event
 
-model_path = "/stylizedhumanbrain"
-material_path = model_path + "/Looks/OmniPBR"
-shader_path = material_path + "/Shader"
+# --- ML Imports 
+try:
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import accuracy_score
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("! WARNING: scikit-learn not found. ML features disabled.     !")
+    print("! Please ensure installation succeeded and restart Create.   !")
+    print("! Command: <Path to python.exe> -m pip install scikit-learn numpy !")
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    SKLEARN_AVAILABLE = False
 
-prim = stage.GetPrimAtPath(model_path)
-if not prim:
-    raise Exception("Model path incorrect!")
 
-UsdGeom.Imageable(prim).MakeVisible()
+BRAIN_REGION_PATHS = {
+    "Brainstem": "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654003/node120/brainstem/Geometry",
+    "Insula": "/Scene/Meshinsula/Geometry",
+    # "Anterior_Cingulate_Cortex": # REMOVED - Path added to Prefrontal_Cortex list below
+    "Caudate_Nucleus": "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654006/node114/acc/Geometry", # Note path ending in 'acc'
+    "Amygdala": "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654/node128/amygdala/Geometry",
+    "Hippocampus": "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654016/node80/hippocampus/Geometry",
+    "Hypothalamus": "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654045/node4/thalamus/Geometry", # Note path ending in 'thalamus'
 
-material = UsdShade.Material.Define(stage, material_path)
-UsdShade.MaterialBindingAPI(prim).Bind(material)
+    # --- Further Updated Regions with Multiple Paths ---
+    "Motor_Cortex": [
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17003/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18003/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19004/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/cortex/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18004/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18010/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17004/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19006/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18012/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/acc003/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19003/Geometry"
+    ],
+    "Prefrontal_Cortex": [
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/prefrontal/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/_prefrontal/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17002/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19001/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19002/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18006/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node40/mesh19005/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17005/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18002/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18001/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18007/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/acc004/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18005/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17006/Geometry",
+        # Newly Added Below:
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node39/mesh18008/Geometry",
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/acc005/Geometry", # Added once
+        "/Scene/scene001/Meshes/Sketchfab_model/USDRoot/scene/Meshes001/RootNode__gltf_orientation_matrix_/RootNode__model_correction_matrix_/zbrush_concat_osgb_cleaner_materialmerger_gles/_sketchfab_data_processing_models_f7a619f7efe4481dbc6b57654034/node38/mesh17001/Geometry"
+    ]
+    # --- End Updated Regions ---
+}
 
-shader = UsdShade.Shader.Define(stage, shader_path)
-shader.CreateIdAttr("OmniPBR")
-material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "bsdf")
 
-shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.2)
-shader.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
+# Heatmap Color Gradient
+COLOR_GREEN = Gf.Vec3f(0.0, 1.0, 0.0); COLOR_YELLOW = Gf.Vec3f(1.0, 1.0, 0.0); COLOR_RED = Gf.Vec3f(1.0, 0.0, 0.0)
+DEFAULT_COLOR = Gf.Vec3f(0.5, 0.5, 0.5)
 
-sample_data = [
-    {"EDA": [0.02], "HR": [75], "TEMP": [36.5]},
-    {"EDA": [0.05], "HR": [120], "TEMP": [37.2]},
-    {"EDA": [0.15], "HR": [95], "TEMP": [36.8]},
-    {"EDA": [0.30], "HR": [140], "TEMP": [38.1]},
-    {"EDA": [0.45], "HR": [110], "TEMP": [37.0]},
-    {"EDA": [0.65], "HR": [130], "TEMP": [38.5]},
-    {"EDA": [0.80], "HR": [150], "TEMP": [39.0]}
-]
+# Simulation Parameters
+UPDATE_INTERVAL_SECONDS = 0.5; CLASSIFICATION_THRESHOLD = 0.6; HIGH_ACTIVATION_ALERT_THRESHOLD = 0.80
 
-def map_color(eda):
-    return Gf.Vec3f(min(max(eda,0),1), 0.0, 1 - min(max(eda,0),1))
+# --- Tunable parameters for tanh activation ---
+DEFAULT_ACTIVATION_GAIN = 2.0 # Controls steepness of tanh curve
+DEFAULT_ACTIVATION_WEIGHT = 1.0 # Scales max output (usually 1.0)
 
-def map_emission(temp):
-    intensity = min(max((temp - 36.5)/(39 - 36.5),0),1)
-    return intensity * 20000
+# --- Global ML Model Placeholder ---
+ml_model = None; label_encoder = None; model_classes = None
+FEATURES = ['ppg_hr', 'eda', 'imu_mag']
 
-def map_scale(hr):
-    return 1.0 + ((hr - 60)/(150 - 60)) * 0.5
+# --- Region Associations (ACC Removed) ---
+REGION_STATE_ASSOCIATION = {
+    "Amygdala": "Anxiety/Threat", "Hypothalamus": "Stress Response", "Prefrontal_Cortex": "Calm/Focus/Emotion Reg.", # Merged ACC role implicitly
+    "Insula": "Anxiety/Interoception", "Hippocampus": "Anxiety/Calm Context",
+    "Caudate_Nucleus": "Focus", "Brainstem": "Arousal/Stress", "Motor_Cortex": "Movement"
+}
 
-async def visualize_stably():
-    xform = UsdGeom.Xformable(prim)
+# --- Synthetic Data Generation ---
+def generate_synthetic_emotibit_data(time_offset=0):
+    time_factor = time.time() + time_offset; hr_base = 75 + 25*np.sin(time_factor*0.1); eda_base = 0.6 + 0.4*np.sin(time_factor*0.08 + np.pi)
+    motion_burst = (np.random.rand() < (0.05 + 0.1*max(0, np.sin(time_factor*0.15)))) * np.random.rand() * 1.5
+    data = {'ppg_hr': hr_base+np.random.randn()*3, 'eda': eda_base+np.random.randn()*0.05 + (np.random.rand()<0.01)*np.random.rand(),
+            'temp': 32.0+0.5*np.sin(time_factor*0.05)+np.random.randn()*0.1, 'imu_mag': 0.05+motion_burst }
+    return data
 
-    for data_point in sample_data:
-        eda = data_point["EDA"][0]
-        temp = data_point["TEMP"][0]
-        hr = data_point["HR"][0]
 
-        shader.CreateInput("albedo_color", Sdf.ValueTypeNames.Color3f).Set(map_color(eda))
-        shader.CreateInput("emissive_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1,1,1))
-        shader.CreateInput("emissive_intensity", Sdf.ValueTypeNames.Float).Set(map_emission(temp))
+def label_synthetic_data(d):
+    hr=d.get('ppg_hr', 70); eda=d.get('eda', 0.5); mo=d.get('imu_mag', 0.1)
+    anx=np.clip((hr-70)/30 + (eda-0.4)*1.5, 0, 1); st=np.clip(anx*0.7 + mo*0.5, 0, 1)
+    calm=np.clip(1 - ((hr-60)/20 + (eda-0.2)*1.0 + mo*0.5), 0, 1); foc=np.clip(1 - (eda-0.3)*1.5 - mo*0.8, 0, 1)
+    if st > CLASSIFICATION_THRESHOLD and st >= foc and st >= calm: return "Stressed"
+    if anx > CLASSIFICATION_THRESHOLD and anx >= foc and anx >= calm: return "Anxious"
+    if calm > CLASSIFICATION_THRESHOLD and calm >= foc: return "Calm"
+    if foc > CLASSIFICATION_THRESHOLD: return "Focused"
+    if mo > CLASSIFICATION_THRESHOLD*1.5: return "Active/Moving"
+    return "Neutral"
 
-        scale_factor = map_scale(hr)
-        xform.ClearXformOpOrder()
-        xform.AddScaleOp().Set(Gf.Vec3f(scale_factor))
+# --- ML Model Training ---
+def train_toy_model(num_samples=1000):
+    global ml_model, label_encoder, model_classes
+    if not SKLEARN_AVAILABLE: print("Cannot train model, scikit-learn not available."); return False
+    print(f"Generating {num_samples} synthetic samples for training..."); features_list = []; labels = []
+    for i in range(num_samples):
+        data = generate_synthetic_emotibit_data(time_offset=i*0.1); features = [data[fn] for fn in FEATURES]; label = label_synthetic_data(data)
+        features_list.append(features); labels.append(label)
+    X = np.array(features_list); y_str = np.array(labels); label_encoder = LabelEncoder(); y = label_encoder.fit_transform(y_str)
+    model_classes = label_encoder.classes_; print(f"Generated {len(set(labels))} classes: {list(model_classes)}")
+    if len(model_classes) < 2: print("Warning: Not enough classes generated."); return False
+    print("Training RandomForestClassifier (TOY model on SYNTHETIC data)...")
+    model = RandomForestClassifier(n_estimators=50, random_state=42, class_weight='balanced'); model.fit(X, y); ml_model = model
+    print("Toy ML model training complete."); return True
 
-        for _ in range(10):
-            await omni.kit.app.get_app().next_update_async()
-            await asyncio.sleep(0.3)
+# --- ML Inference (Using Tanh Activation Mapping) ---
+def infer_brain_activation_ml(d):
+    global ml_model, label_encoder, model_classes; act = {r: 0.0 for r in BRAIN_REGION_PATHS}; emo = "ML Model Error"
+    if ml_model and label_encoder and model_classes is not None:
+        try:
+            ft = np.array([[d[n] for n in FEATURES]]); probs = ml_model.predict_proba(ft)[0]; p_idx = np.argmax(probs); emo = model_classes[p_idx]
+            p_map = {model_classes[i]: probs[i] for i in range(len(model_classes))}
+            anx_p=p_map.get("Anxious", 0.0); st_p=p_map.get("Stressed", 0.0); calm_p=p_map.get("Calm", 0.0); foc_p=p_map.get("Focus", 0.0); mot_d=d.get('imu_mag', 0.0)
+            anx_s=max(anx_p, st_p*0.7); st_s=st_p
 
-    #Clearly set final stable state (pure red glow):
-    shader.CreateInput("albedo_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1.0, 0.0, 0.0))
-    shader.CreateInput("emissive_color", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(1.0, 0.2, 0.2))
-    shader.CreateInput("emissive_intensity", Sdf.ValueTypeNames.Float).Set(25000.0)
+            gain = DEFAULT_ACTIVATION_GAIN; weight = DEFAULT_ACTIVATION_WEIGHT; baseline_brainstem = 0.1
 
-    # Longer stable view (~5 seconds clearly red):
-    for _ in range(15):
-        await omni.kit.app.get_app().next_update_async()
-        await asyncio.sleep(0.3)
+            if "Amygdala" in act: act['Amygdala'] = np.clip(np.tanh(anx_s * gain) * weight, 0.0, 1.0)
+            if "Hypothalamus" in act: act['Hypothalamus'] = np.clip(np.tanh(st_s * gain) * weight, 0.0, 1.0)
+            if "Prefrontal_Cortex" in act:
+                pfc_signal = max(0, (calm_p * 0.5 + foc_p * 0.5) - st_s * 0.3)
+                act['Prefrontal_Cortex'] = np.clip(np.tanh(pfc_signal * gain) * weight, 0.0, 1.0)
+            if "Insula" in act:
+                insula_signal = max(anx_s, st_s * 0.5)
+                act['Insula'] = np.clip(np.tanh(insula_signal * gain) * weight, 0.0, 1.0)
+            if "Hippocampus" in act:
+                hippo_signal = max(anx_s * 0.4, calm_p * 0.5)
+                act['Hippocampus'] = np.clip(np.tanh(hippo_signal * gain) * weight, 0.0, 1.0)
+            if "Caudate_Nucleus" in act: act['Caudate_Nucleus'] = np.clip(np.tanh(foc_p * gain) * weight, 0.0, 1.0)
+            if "Brainstem" in act:
+                brainstem_variable = np.clip(np.tanh(st_s * gain * 0.7) * weight, 0.0, 1.0)
+                act['Brainstem'] = np.clip(baseline_brainstem + (1.0 - baseline_brainstem) * brainstem_variable, 0.0, 1.0)
+            if "Motor_Cortex" in act: act['Motor_Cortex'] = np.clip(mot_d, 0, 1)
+        except Exception as e: print(f"Error during ML inference: {e}")
+    else: emo = "ML Unavailable"
+    final_act = {r: np.clip(act.get(r, 0.0), 0.0, 1.0) for r in BRAIN_REGION_PATHS}; return final_act, emo
 
-    print("Brain visualization completed and set to red clearly.")
+# --- Visualization Update ---
+def get_or_create_material(stage, prim_path, material_name="EmotiveMaterial"):
+    prim = stage.GetPrimAtPath(prim_path);
+    if not prim.IsValid(): return None
+    bind_api = UsdShade.MaterialBindingAPI(prim); rel = bind_api.GetDirectBindingRel(); targets = rel.GetTargets()
+    if targets:
+        mat_prim = stage.GetPrimAtPath(targets[0])
+        if mat_prim and mat_prim.IsA(UsdShade.Material):
+            mat = UsdShade.Material(mat_prim); out = mat.GetSurfaceOutput()
+            if out and out.HasConnectedSource():
+                src = out.GetConnectedSource()[0].GetPath(); shd_prim = stage.GetPrimAtPath(src.GetPrimPath())
+                if shd_prim and shd_prim.IsA(UsdShade.Shader): return UsdShade.Shader(shd_prim)
+    mat_p = prim.GetPath().AppendPath(material_name); shd_p = mat_p.AppendPath("PreviewSurface")
+    mtl = UsdShade.Material.Define(stage, mat_p); shd = UsdShade.Shader.Define(stage, shd_p)
+    shd.CreateIdAttr("UsdPreviewSurface"); shd.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.5); shd.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
+    mtl.CreateSurfaceOutput().ConnectToSource(shd.ConnectableAPI(), "surface")
+    try: bind_api.Bind(mtl)
+    except Exception as e: print(f"Error binding material {mtl.GetPath()} to {prim_path}: {e}")
+    return shd
 
-asyncio.ensure_future(visualize_stably())
+def apply_heatmap_color(stage, shader, act_lvl):
+    if shader is None or not shader.GetPrim().IsValid(): return
+    act_lvl = np.clip(act_lvl, 0.0, 1.0)
+    if act_lvl <= 0.5: t = act_lvl*2.0; clr = COLOR_GREEN*(1.0-t) + COLOR_YELLOW*t
+    else: t = (act_lvl-0.5)*2.0; clr = COLOR_YELLOW*(1.0-t) + COLOR_RED*t
+    try:
+        emi = shader.CreateInput("emissiveColor", Sdf.ValueTypeNames.Color3f); intens = min(0.05 + 0.95*(act_lvl**2), 1.0)
+        fin_clr = Gf.Vec3f(clr[0], clr[1], clr[2]) * intens; emi.Set(fin_clr)
+    except Exception as e: print(f"Error applying color to shader {shader.GetPath()}: {e}")
+
+# --- Main Simulation Loop ---
+_update_subscription = None; _brain_shaders = {}; _cleanup_subscriber = None
+_last_update_time = 0.0; _last_printed_emotion = ""
+
+def cleanup_subscription(event=None):
+    global _update_subscription, _cleanup_subscriber, _brain_shaders, _last_printed_emotion
+    global ml_model, label_encoder, model_classes; import omni.usd
+    print("Cleanup requested...")
+    if _update_subscription: _update_subscription.unsubscribe(); _update_subscription = None; print("Unsubscribed from update event.")
+    if _cleanup_subscriber: _cleanup_subscriber.unsubscribe(); _cleanup_subscriber = None; print("Unsubscribed from shutdown event.")
+    try:
+        stage = omni.usd.get_context().get_stage()
+        if stage and _brain_shaders:
+             print(f"Resetting colors for {len(_brain_shaders)} cached shaders...")
+             for p_path, shd in list(_brain_shaders.items()):
+                 if shd and shd.GetPrim().IsValid():
+                     try: emi = shd.GetInput("emissiveColor"); emi.Set(Gf.Vec3f(0,0,0))
+                     except: pass
+             _brain_shaders.clear(); print("Brain region colors reset attempt finished.")
+    except Exception as e: print(f"Error during cleanup stage access or color reset: {e}")
+    _last_printed_emotion = ""; ml_model = None; label_encoder = None; model_classes = None
+    print("Cleanup finished.")
+
+def on_update(e):
+    global _last_update_time, _last_printed_emotion; current_time = time.time()
+    if current_time - _last_update_time < UPDATE_INTERVAL_SECONDS: return
+    _last_update_time = current_time; import omni.usd
+    try:
+        stage = omni.usd.get_context().get_stage();
+        if not stage: return
+        physio_data = generate_synthetic_emotibit_data()
+
+        if SKLEARN_AVAILABLE and ml_model: brain_act, classi_emo = infer_brain_activation_ml(physio_data); ml_src = "ML"
+        else: brain_act = {r: 0.0 for r in BRAIN_REGION_PATHS}; classi_emo = "ML Disabled/Failed"; ml_src = "N/A"
+
+        if classi_emo != _last_printed_emotion: print(f"\n--- Current State ({ml_src}): {classi_emo} ---"); _last_printed_emotion = classi_emo
+
+        alert_msgs = []
+        for r_name in BRAIN_REGION_PATHS.keys(): # Iterate through defined regions
+            act_lvl = brain_act.get(r_name, 0.0)
+            if act_lvl >= HIGH_ACTIVATION_ALERT_THRESHOLD:
+                mean = REGION_STATE_ASSOCIATION.get(r_name, "Unknown Func"); alert_msgs.append(f"  ALERT: High Activation in {r_name} ({act_lvl:.2f}). Suggests: {mean}.")
+        if alert_msgs: print("\n".join(alert_msgs))
+
+        for r_name, path_inf in BRAIN_REGION_PATHS.items():
+            p_list = path_inf if isinstance(path_inf, list) else [path_inf] if isinstance(path_inf, str) else []
+            if not p_list: continue
+            act = brain_act.get(r_name, 0.0) # Get activation for the conceptual region name
+            for p_path in p_list:
+                shd = None
+                try:
+                    shd = _brain_shaders.get(p_path) # Use prim_path as key for cache
+                    if shd is None and p_path not in _brain_shaders:
+                        prim = stage.GetPrimAtPath(p_path)
+                        if prim.IsValid(): mat_name = f"{prim.GetName()}_{hash(p_path) & 0xFFFFF}_EmotiveMat"; shd = get_or_create_material(stage, p_path, mat_name=mat_name); _brain_shaders[p_path] = shd
+                        else:
+                             if p_path not in _brain_shaders: print(f"Prim path not found on update: {p_path}")
+                             _brain_shaders[p_path] = None; continue
+                    if shd and shd.GetPrim().IsValid(): apply_heatmap_color(stage, shd, act) # Apply conceptual activation
+                except Exception as e: print(f"Error processing path {p_path} for region {r_name}: {e}"); _brain_shaders[p_path] = None
+    except Exception as e: print(f"Error during on_update: {e}"); import traceback; traceback.print_exc(); cleanup_subscription()
+
+def run_simulation():
+    global _update_subscription, _cleanup_subscriber, _brain_shaders, _last_update_time, _last_printed_emotion
+    import omni.usd; import omni.kit.app; cleanup_subscription();
+    if _update_subscription is not None: return
+    print("Starting brain activation simulation..."); m_ok = False
+    if SKLEARN_AVAILABLE: m_ok = train_toy_model()
+    else: print("Skipping ML model training (scikit-learn not available).")
+    if not m_ok and SKLEARN_AVAILABLE: print("ML Model training failed.")
+    print("Initializing materials..."); _brain_shaders.clear(); _last_update_time = 0.0; _last_printed_emotion = ""; p_init = []
+    try:
+        stage = omni.usd.get_context().get_stage();
+        if not stage: print("Error: No stage found during initialization."); return
+        for r_name, path_inf in BRAIN_REGION_PATHS.items():
+            p_list = path_inf if isinstance(path_inf, list) else [path_inf] if isinstance(path_inf, str) else []
+            for p_path in p_list:
+                 p_init.append(p_path); prim = stage.GetPrimAtPath(p_path)
+                 if prim.IsValid(): mat_name = f"{prim.GetName()}_{hash(p_path) & 0xFFFFF}_EmotiveMat"; _brain_shaders[p_path] = get_or_create_material(stage, p_path, material_name=mat_name) # Correct keyword arg
+                 else: print(f"Initial check failed: Prim path not found: {p_path}"); _brain_shaders[p_path] = None
+    except Exception as e: print(f"Error during initialization: {e}"); import traceback; traceback.print_exc(); return
+    print(f"Initialization complete. Attempted {len(p_init)} prim paths. Cached {len([s for s in _brain_shaders.values() if s])} valid shaders.")
+    print("Starting updates..."); app = omni.kit.app.get_app()
+    _update_subscription = app.get_update_event_stream().create_subscription_to_pop( on_update, name="Brain Heatmap Update")
+    _cleanup_subscriber = omni.kit.app.get_app().get_shutdown_event_stream().create_subscription_to_pop( cleanup_subscription, name="cleanup brain sim on shutdown")
+    print("Subscribed to update and shutdown events.")
+
+# --- Start Execution ---
+if __name__ == "__main__": run_simulation()
+# --- To Stop Manually ---
+# cleanup_subscription()
